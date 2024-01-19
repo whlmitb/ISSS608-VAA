@@ -72,7 +72,7 @@ Then filtering out student performance data related to math, reading, and scienc
 ```{r}
 # eval: false
 Related_math_read_scie_data <- stu_qqq_SG %>%
-  select(contains(c("ID","ST004D01T","math", "read", "scie")))
+  select(contains(c("ID","ST004D01T","math", "read", "scie","ST259Q01JA","ST259Q02JA")))
 
 ```
 
@@ -88,6 +88,7 @@ read_rds("data/Related_math_read_scie_data.rds")
 ```
 
 ## Plotting a simple bar chart
+
 We first looked at the data in general to see the overall distribution of math, reading, and science average plausible values. Through visualization methods such as histograms and box graphs, we have clarified the range of students' performance in various subjects.
 
 ### Maths Distribution
@@ -96,6 +97,12 @@ We first looked at the data in general to see the overall distribution of math, 
 Related_math_read_scie_data <- Related_math_read_scie_data %>%
   mutate(avg_pvMATH = rowMeans(select(., ends_with("Math")), na.rm = TRUE))
 
+```
+
+```{r}
+Related_math_read_scie_data %>%
+  select(CNTSCHID, CNTSTUID,avg_pvMATH) %>%
+  head(5)
 ```
 
 ```{r}
@@ -119,7 +126,9 @@ ggplot(data = Related_math_read_scie_data, aes(x = avg_pvMATH, fill = factor(ST0
   labs(x = "avg_pvMATH", y = "Frequency", fill = "Gender") +
   scale_fill_manual(values = c("skyblue", "pink"))
 ```
+
 ### Maths Distribution by School ID
+
 ```{r}
 ggplot(data = Related_math_read_scie_data, aes(x = factor(CNTSCHID), y = avg_pvMATH)) +
   geom_boxplot(fill = "skyblue", color = "black") +
@@ -129,11 +138,12 @@ ggplot(data = Related_math_read_scie_data, aes(x = factor(CNTSCHID), y = avg_pvM
 ```
 
 #### Insights from Visualisations by Maths Distribution
+
 Based on an analysis of mathematical average Plausible Values, it ranges from 250 to 850. Through the visual chart, we observe that the distribution is mainly in the range of 500 to 700, indicating that the students' math performance is relatively concentrated.
 
 In terms of gender influence, it is found that before 620, the average Plausible Values of boys are generally higher, and after 620, the average Plausible Values of girls begin to dominate. This may suggest some variation in the ability levels of boys and girls in mathematics.
 
-In addition, in terms of the influence of each school on the average Plausible Values, it is difficult to distinguish the significant differences between different schools in general through the box chart observation. However, we can roughly observe that some schools have higher average Plausible Values, while others have relatively lower ones. 
+In addition, in terms of the influence of each school on the average Plausible Values, it is difficult to distinguish the significant differences between different schools in general through the box chart observation. However, we can roughly observe that some schools have higher average Plausible Values, while others have relatively lower ones.
 
 ### Reading Distribution
 
@@ -141,6 +151,12 @@ In addition, in terms of the influence of each school on the average Plausible V
 Related_math_read_scie_data <- Related_math_read_scie_data %>%
   mutate(avg_pvREAD = rowMeans(select(., ends_with("READ")), na.rm = TRUE))
 
+```
+
+```{r}
+Related_math_read_scie_data %>%
+  select(CNTSCHID, CNTSTUID,avg_pvREAD) %>%
+  head(5)
 ```
 
 ```{r}
@@ -176,18 +192,24 @@ ggplot(data = Related_math_read_scie_data, aes(x = factor(CNTSCHID), y = avg_pvR
 ```
 
 #### Insights from Visualisations by Reading Distribution
+
 Based on an analysis of reading average Plausible Values, it ranges from 150 to 800. Through the visual chart, we observe that the distribution is mainly in the range of 450 to 650, which indicates that the students' reading performance is relatively concentrated.
 
 In terms of gender influence, it is found that before 600, the average Plausible Values of girls are generally higher, and after 600, the average Plausible Values of boys begin to dominate. This change may suggest that in reading, girls perform better in the lower section, while boys perform more prominently in the higher section.
 
-In addition, in terms of the influence of each school on the average Plausible Values, it is difficult to distinguish the significant differences between different schools in general through the box chart observation. However, we can roughly observe that some schools have higher average Plausible Values, while others have relatively lower ones. 
+In addition, in terms of the influence of each school on the average Plausible Values, it is difficult to distinguish the significant differences between different schools in general through the box chart observation. However, we can roughly observe that some schools have higher average Plausible Values, while others have relatively lower ones.
 
 ### Science Distribution
 
 ```{r}
 Related_math_read_scie_data <- Related_math_read_scie_data %>%
   mutate(avg_pvSCIE = rowMeans(select(., ends_with("SCIE")), na.rm = TRUE))
+```
 
+```{r}
+Related_math_read_scie_data %>%
+  select(CNTSCHID, CNTSTUID,avg_pvSCIE) %>%
+  head(5)
 ```
 
 ```{r}
@@ -197,7 +219,6 @@ ggplot(data=Related_math_read_scie_data, aes(x = avg_pvSCIE)) +
                  color="black", 
                  fill="grey") +
   ggtitle("Distribution of PV SCIE")
-
 ```
 
 ### Science Distribution by Gender
@@ -221,20 +242,34 @@ ggplot(data = Related_math_read_scie_data, aes(x = factor(CNTSCHID), y = avg_pvS
   labs(x = "School ID", y = "PV SCIE") +
   theme_minimal()
 ```
+
 #### Insights from Visualisations by Science Distribution
+
 Based on an analysis of scientific average Plausible Values, it ranges from 200 to 850. Through the visual chart, we observe that the distribution is mainly in the range of 500 to 650, showing that the performance of students in the science field is relatively concentrated.
 
 In terms of gender influence, it is found that before 600, the average Plausible Values of boys are generally higher, and after 600, the average Plausible Values of girls begin to dominate. This could mean that at the higher end of the spectrum, girls do better in science, while at the lower end, boys do relatively well.
 
-In addition, in terms of the influence of each school on the average Plausible Values, it is difficult to distinguish the significant differences between different schools in general through the box chart observation. However, we can roughly observe that some schools have higher average Plausible Values, while others have relatively lower ones. 
+In addition, in terms of the influence of each school on the average Plausible Values, it is difficult to distinguish the significant differences between different schools in general through the box chart observation. However, we can roughly observe that some schools have higher average Plausible Values, while others have relatively lower ones.
 
-# Conclusion 
+### The relationship between socioeconomic status and performances
+
+-   [Computer-Based Student Questionnaire for Pisa 2022 - Main Survey Version](https://www.oecd.org/pisa/data/2022database/CY8_202111_QST_MS_STQ_CBA_NoNotes.pdf)
+
+![](images/clipboard-2399481357.png){width="578"}
+
+```{r}
+Related_math_read_scie_data %>%
+  select(CNTSCHID, CNTSTUID, ST259Q01JA, ST259Q02JA) %>%
+  head(5)
+```
+According to this questionnaire report, we can filter out "ST259Q01JA" and "ST259Q02JA", two columns of data that can reflect a person's socioeconomic status. But in these two columns, there is no specific data, so we cannot judge the relationship between socioeconomic status and performances.
+
+# Conclusion
+
 In terms of gender impact, we found some differences between the sexes across disciplines. In math, boys outperformed at the higher levels, while in reading and science, girls outperformed in some sections. This provides us with a preliminary understanding of gender on academic performance.
 
 Although it is difficult to distinguish significant differences between individual schools, we use the box chart to get a rough idea of the groups of students who are likely to have high scores in certain subjects at some schools. This provides a basis for further in-depth analysis at the school level.
 
-## Limitation for Visualisations
-### Limitation for analysing the relationship between socioeconomic status and performances
-We recognize that socioeconomic status is a complex concept that is difficult to accurately define with simple data. Therefore, in the current data set, it is difficult to clearly reveal the relationship between student performance and socioeconomic status. This suggests that more dimensions and indicators are needed in future studies to fully understand students' socioeconomic status.
+Without specific figures, we cannot judge the relationship between socioeconomic status and performances.
 
 
