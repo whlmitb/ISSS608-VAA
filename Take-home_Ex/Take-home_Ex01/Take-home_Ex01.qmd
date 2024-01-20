@@ -158,8 +158,6 @@ p1 + p2 + p3 +
 
 #### Insights from Visualisations by Distributions
 
-
-#### Insights for Maths/Read/Science Distributions
 Analyzing average Plausible Values for math (250-850), reading (150-800), and science (200-850),respectively. The median math mean confidence was 582.41, meaning that about half of the students had an average confidence of less than or greater than 582.41. Similar trends exist in reading and science. The median reading average confidence was 553.63. The median scientific average confidence value is 571.24. These medians are an important indicator of where the average performance is.
 
 ### The Relationship between Gender and Performances
