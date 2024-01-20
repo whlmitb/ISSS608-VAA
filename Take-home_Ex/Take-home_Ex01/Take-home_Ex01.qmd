@@ -33,7 +33,7 @@ In this take-home exercise, some R packages will be used. They are:
 The code chunk used is as follows:
 
 ```{r}
-pacman::p_load(tidyverse, haven, ggplot2)
+pacman::p_load(tidyverse, haven, ggplot2, patchwork, dplyr)
 ```
 
 ## Importing PISA data
@@ -72,7 +72,7 @@ Select related to math, reading and science student performance data, as well as
 ```{r}
 # eval: false
 Related_math_read_scie_data <- stu_qqq_SG %>%
-  select(contains(c("ID","ST004D01T","math", "read", "scie","ST259Q01JA","ST259Q02JA")))
+  select(contains(c("ID","ST004D01T","math", "read", "scie","ST259Q01JA","ST259Q02JA","ST005Q01JA","ST007Q01JA")))
 
 ```
 
@@ -92,6 +92,8 @@ read_rds("data/Related_math_read_scie_data.rds")
 Calculate the average of PV1-10 Maths/Read/Science, representing each student's ability to perform maths/Read/Science.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
 Related_math_read_scie_data <- Related_math_read_scie_data %>%
   mutate(avg_pvMATH = rowMeans(select(., ends_with("Math")), na.rm = TRUE))
 
@@ -101,221 +103,167 @@ Related_math_read_scie_data <- Related_math_read_scie_data %>%
 Related_math_read_scie_data <- Related_math_read_scie_data %>%
   mutate(avg_pvSCIE = rowMeans(select(., ends_with("SCIE")), na.rm = TRUE))
 
-```
-
-```{r}
 Related_math_read_scie_data %>%
   select(CNTSCHID, CNTSTUID,avg_pvMATH, avg_pvREAD, avg_pvSCIE) %>%
   head(5)
 ```
+
 ## Plotting a simple bar chart
 
 We first looked at the data in general to see the overall distribution of math, reading, and science average plausible values. Through visualization methods such as histograms and box graphs, we have clarified the range of students' performance in various subjects.
 
-### Maths Distribution
+### Maths/Read/Science Distributions
+
 ```{r}
-ggplot(data=Related_math_read_scie_data, aes(x = avg_pvMATH)) +
-  geom_histogram(bins=20, 
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p1 <- ggplot(data=Related_math_read_scie_data, aes(x = avg_pvMATH)) +
+  geom_histogram(bins=10, 
                  boundary = 100,
                  color="black", 
                  fill="grey") +
-  ggtitle("Distribution of PV Maths")
+  geom_vline(aes(xintercept = median(avg_pvMATH)), color = "red", linetype = "dashed") +
+  annotate("text", x = median(Related_math_read_scie_data$avg_pvMATH), y = 30, 
+           label = paste("Median:", round(median(Related_math_read_scie_data$avg_pvMATH), 2)), 
+           vjust = 1, color = "red") +
+  labs(y = "Count")
 
+p2 <- ggplot(data=Related_math_read_scie_data, aes(x = avg_pvREAD)) +
+  geom_histogram(bins=10, 
+                 boundary = 100,
+                 color="black", 
+                 fill="grey") +
+  geom_vline(aes(xintercept = median(avg_pvREAD)), color = "red", linetype = "dashed") +
+  annotate("text", x = median(Related_math_read_scie_data$avg_pvREAD), y = 30, 
+           label = paste("Median:", round(median(Related_math_read_scie_data$avg_pvREAD), 2)), 
+           vjust = 1, color = "red") +
+  labs(y = "Count")
+
+p3 <- ggplot(data=Related_math_read_scie_data, aes(x = avg_pvSCIE)) +
+  geom_histogram(bins=10, 
+                 boundary = 100,
+                 color="black", 
+                 fill="grey") +
+  geom_vline(aes(xintercept = median(avg_pvSCIE)), color = "red", linetype = "dashed") +
+  annotate("text", x = median(Related_math_read_scie_data$avg_pvSCIE), y = 30, 
+           label = paste("Median:", round(median(Related_math_read_scie_data$avg_pvSCIE), 2)), 
+           vjust = 1, color = "red") +
+  labs(y = "Count")
+
+p1 + p2 + p3 +
+  plot_layout(guides = "collect") +
+  plot_annotation(title = "Distributions of Maths/Reading/Science with Median Lines", tag_levels = "I")
 ```
-#### Insights from Visualisations by Maths Distribution
 
-Based on an analysis of mathematical average Plausible Values, it ranges from 250 to 850. Through the visual chart, we observe that the distribution is mainly in the range of 500 to 700, indicating that the students' math performance is relatively concentrated.
+#### Insights from Visualisations by Distributions
 
-### Maths Distribution by Gender
+
+#### Insights for Maths/Read/Science Distributions
+Analyzing average Plausible Values for math (250-850), reading (150-800), and science (200-850),respectively. The median math mean confidence was 582.41, meaning that about half of the students had an average confidence of less than or greater than 582.41. Similar trends exist in reading and science. The median reading average confidence was 553.63. The median scientific average confidence value is 571.24. These medians are an important indicator of where the average performance is.
+
+### The Relationship between Gender and Performances
 
 In general, gender coding conventions, 1 means male and 2 means female.
 
 ```{r}
-ggplot(data = Related_math_read_scie_data, aes(x = avg_pvMATH, fill = factor(ST004D01T))) +
-  geom_histogram(bins = 20, color = "grey30", position = "identity", alpha = 0.7) +
-  ggtitle("Distribution of PV Maths by Gender") +
-  labs(x = "avg_pvMATH", y = "Frequency", fill = "Gender") +
+#| code-fold: true
+#| code-summary: "Show the code"
+p4 <- ggplot(data = Related_math_read_scie_data, aes(x = avg_pvMATH, fill = factor(ST004D01T))) +
+  geom_histogram(bins = 10, color = "grey30", position = "identity", alpha = 0.7) +
+  labs(x = "avg_pvMATH", y = "Count", fill = "Gender") +
   scale_fill_manual(values = c("skyblue", "pink"))
+
+p5 <- ggplot(data = Related_math_read_scie_data, aes(x = avg_pvREAD, fill = factor(ST004D01T))) +
+  geom_histogram(bins = 10, color = "grey30", position = "identity", alpha = 0.7) +
+  labs(x = "avg_pvREAD", y = "Count", fill = "Gender") +
+  scale_fill_manual(values = c("skyblue", "pink"))
+
+p6 <- ggplot(data = Related_math_read_scie_data, aes(x = avg_pvSCIE, fill = factor(ST004D01T))) +
+  geom_histogram(bins = 10, color = "grey30", position = "identity", alpha = 0.7) +
+  labs(x = "avg_pvSCIE", y = "Count", fill = "Gender") +
+  scale_fill_manual(values = c("skyblue", "pink"))
+
+p4 + p5 + p6 +
+  plot_layout(guides = "collect") +
+  plot_annotation(title = "The Relationship between Gender and Performances", tag_levels = "I")
 ```
 
-#### Insights from Visualisations with Maths Distribution by Gender
-In terms of gender influence, it is found that before 620, the average Plausible Values of boys are generally higher, and after 620, the average Plausible Values of girls begin to dominate. This may suggest some variation in the ability levels of boys and girls in mathematics.
+#### Insights the Relationship between Maths/Read/Science Performances and Gender
 
-### Maths Distribution by School ID
+Gender-related insights from visualizations show variations in Plausible Values. In mathematics, boys exhibit higher values before around 610, with girls dominating afterward. In reading, girls perform better in the lower range (before 600), while boys excel in the higher range (after 600). Similarly, in science, boys show higher values before about 590, and girls dominate afterward, indicating differing gender performance levels across subjects.
 
-When using "avg_pvMATH" values for all students in a school, it is difficult to get an accurate picture of the relative strengths and weaknesses of each school's score distribution due to the large number of schools and students involved. 
+### The Relationship between School and Performances
 
-Although the impact of each school on the average confidence value is presented in the box plot, it is difficult to distinguish overall significant differences between different schools by looking at the box plot. We can only roughly observe that some schools have high average trustworthiness, while others have relatively low average trustworthiness.
-
-```{r}
-ggplot(data = Related_math_read_scie_data, aes(x = factor(CNTSCHID), y = avg_pvMATH)) +
-  geom_boxplot(fill = "skyblue", color = "black") +
-  ggtitle("PV Maths Distribution by School ID") +
-  labs(x = "School ID", y = "PV Maths") +
-  theme_minimal()
-```
-Let's take the math example here. In this boxplot, it's hard to see a trend. 
+When using "avg_pvMATH", "avg_pvREAD", "avg_pvREAD" values for all students in a school, it is difficult to get an accurate picture of the relative strengths and weaknesses of each school's score distribution due to the large number of schools and students involved.
 
 Therefore, we average the "avg_pvMATH" of all students in each school to get the school's "avg_pvMATH_school". In this way we can get a clearer picture of the impact of school on the relationship between performance and school.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
 Related_math_read_scie_data <- Related_math_read_scie_data %>% 
   group_by(CNTSCHID) %>%
   mutate(avg_pvMATH_school = mean(avg_pvMATH, na.rm = TRUE))
-```
 
-```{r}
+Related_math_read_scie_data <- Related_math_read_scie_data %>% 
+  group_by(CNTSCHID) %>%
+  mutate(avg_pvREAD_school = mean(avg_pvREAD, na.rm = TRUE))
+
+Related_math_read_scie_data <- Related_math_read_scie_data %>% 
+  group_by(CNTSCHID) %>%
+  mutate(avg_pvSCIE_school = mean(avg_pvSCIE, na.rm = TRUE))
+
 Related_math_read_scie_data %>%
-  select(CNTSCHID, CNTSTUID,avg_pvMATH_school) %>%
+  select(CNTSCHID, CNTSTUID,avg_pvMATH_school, avg_pvREAD_school, avg_pvSCIE_school) %>%
   head(5)
 ```
 
 ```{r}
-ggplot(data = Related_math_read_scie_data, 
+#| code-fold: true
+#| code-summary: "Show the code"
+p7 <- ggplot(data = Related_math_read_scie_data, 
              aes(x = CNTSCHID, 
                  y = avg_pvMATH_school)) +
   geom_point() +
   geom_smooth(formula = y~x, method = lm, 
               size = 0.5) +  
-  ggtitle("Scatterplot of Average PV Maths by School ID") +
   labs(x = "School ID", y = "Average PV Maths")
-```
-#### Insights from Visualisations with Maths Distribution by School ID
-Using this scatter plot, we observe that the average maths performance of schools in the range of school numbers from 70200001 to 70200165 shows a decreasing trend.
 
-### Reading Distribution
-```{r}
-ggplot(data=Related_math_read_scie_data, aes(x = avg_pvREAD)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="black", 
-                 fill="grey") +
-  ggtitle("Distribution of PV READ")
-
-```
-#### Insights from Visualisations by Reading Distribution
-
-Based on an analysis of reading average Plausible Values, it ranges from 150 to 800. Through the visual chart, we observe that the distribution is mainly in the range of 450 to 650, which indicates that the students' reading performance is relatively concentrated.
-
-### Reading Distribution by Gender
-
-In general, gender coding conventions, 1 means male and 2 means female.
-
-```{r}
-ggplot(data = Related_math_read_scie_data, aes(x = avg_pvREAD, fill = factor(ST004D01T))) +
-  geom_histogram(bins = 20, color = "grey30", position = "identity", alpha = 0.7) +
-  ggtitle("Distribution of PV READ by Gender") +
-  labs(x = "avg_pvREAD", y = "Frequency", fill = "Gender") +
-  scale_fill_manual(values = c("skyblue", "pink"))
-```
-#### Insights from Visualisations with Reading Distribution by Gender
-In terms of gender influence, it is found that before 600, the average Plausible Values of girls are generally higher, and after 600, the average Plausible Values of boys begin to dominate. This change may suggest that in reading, girls perform better in the lower section, while boys perform more prominently in the higher section.
-
-### Reading Distribution by School ID
-
-```{r}
-ggplot(data = Related_math_read_scie_data, aes(x = factor(CNTSCHID), y = avg_pvREAD)) +
-  geom_boxplot(fill = "skyblue", color = "black") +
-  ggtitle("PV READ Distribution by School ID") +
-  labs(x = "School ID", y = "PV READ") +
-  theme_minimal()
-```
-```{r}
-Related_math_read_scie_data <- Related_math_read_scie_data %>% 
-  group_by(CNTSCHID) %>%
-  mutate(avg_pvREAD_school = mean(avg_pvREAD, na.rm = TRUE))
-```
-
-```{r}
-Related_math_read_scie_data %>%
-  select(CNTSCHID, CNTSTUID,avg_pvREAD_school) %>%
-  head(5)
-```
-
-```{r}
-ggplot(data = Related_math_read_scie_data, 
+p8 <- ggplot(data = Related_math_read_scie_data, 
              aes(x = CNTSCHID, 
                  y = avg_pvREAD_school)) +
   geom_point() +
   geom_smooth(formula = y~x, method = lm, 
-              size = 0.5) +  
-  ggtitle("Scatterplot of Average PV Read by School ID") +
+              size = 0.5) +
   labs(x = "School ID", y = "Average PV Read")
-```
 
-#### Insights from Visualisations with Read Distribution by School ID
-The average read performance of schools in the range of school numbers from 70200001 to 70200165 also shows a decreasing trend.
-
-### Science Distribution
-
-```{r}
-ggplot(data=Related_math_read_scie_data, aes(x = avg_pvSCIE)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="black", 
-                 fill="grey") +
-  ggtitle("Distribution of PV SCIE")
-```
-#### Insights from Visualisations by Science Distribution
-
-Based on an analysis of scientific average Plausible Values, it ranges from 200 to 850. Through the visual chart, we observe that the distribution is mainly in the range of 500 to 650, showing that the performance of students in the science field is relatively concentrated.
-
-### Science Distribution by Gender
-
-In general, gender coding conventions, 1 means male and 2 means female.
-
-```{r}
-ggplot(data = Related_math_read_scie_data, aes(x = avg_pvSCIE, fill = factor(ST004D01T))) +
-  geom_histogram(bins = 20, color = "grey30", position = "identity", alpha = 0.7) +
-  ggtitle("Distribution of PV SCIE by Gender") +
-  labs(x = "avg_pvSCIE", y = "Frequency", fill = "Gender") +
-  scale_fill_manual(values = c("skyblue", "pink"))
-```
-#### Insights from Visualisations with Science Distribution by Gender
-In terms of gender influence, it is found that before 600, the average Plausible Values of boys are generally higher, and after 600, the average Plausible Values of girls begin to dominate. This could mean that at the higher end of the spectrum, girls do better in science, while at the lower end, boys do relatively well.
-
-### Science Distribution by School ID
-
-```{r}
-ggplot(data = Related_math_read_scie_data, aes(x = factor(CNTSCHID), y = avg_pvSCIE)) +
-  geom_boxplot(fill = "skyblue", color = "black") +
-  ggtitle("PV SCIE Distribution by School ID") +
-  labs(x = "School ID", y = "PV SCIE") +
-  theme_minimal()
-```
-
-```{r}
-Related_math_read_scie_data <- Related_math_read_scie_data %>% 
-  group_by(CNTSCHID) %>%
-  mutate(avg_pvSCIE_school = mean(avg_pvSCIE, na.rm = TRUE))
-```
-
-```{r}
-Related_math_read_scie_data %>%
-  select(CNTSCHID, CNTSTUID,avg_pvSCIE_school) %>%
-  head(5)
-```
-
-```{r}
-ggplot(data = Related_math_read_scie_data, 
+p9 <- ggplot(data = Related_math_read_scie_data, 
              aes(x = CNTSCHID, 
                  y = avg_pvSCIE_school)) +
   geom_point() +
   geom_smooth(formula = y~x, method = lm, 
               size = 0.5) +  
-  ggtitle("Scatterplot of Average PV Scie by School ID") +
   labs(x = "School ID", y = "Average PV Scie")
-```
-#### Insights from Visualisations with Science Distribution by School ID
-The average science performance of schools in the range of school numbers from 70200001 to 70200165 also shows a decreasing trend.
 
-### The relationship between socioeconomic status and performances
+p7 + p8 + p9 +
+    plot_layout(guides = "collect") +
+  plot_annotation(title = "The Relationship between School and Performances", tag_levels = "I")
+```
+
+#### Insights the Relationship between Maths/Read/Science Performances and School ID
+
+Using this scatter plot, we notice a decreasing trend in average performance in math, reading, and science for school numbers ranging from 70200001 to 70200165. This shows that whether it is math, reading or science, the students in school 70200001 are the best, and it decreases all the way to school 70200165, which is the students in school 70200165 are the worst.
+
+### The Relationship between Socioeconomic Status and Performances
 
 -   [Computer-Based Student Questionnaire for Pisa 2022 - Main Survey Version](https://www.oecd.org/pisa/data/2022database/CY8_202111_QST_MS_STQ_CBA_NoNotes.pdf)
 
-![](images/clipboard-2399481357.png){width="578"}
+![](images/clipboard-2399481357.png){width="501"}
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
 Related_math_read_scie_data %>%
   select(CNTSCHID, CNTSTUID, ST259Q01JA, ST259Q02JA) %>%
   head(5)
@@ -323,12 +271,53 @@ Related_math_read_scie_data %>%
 
 According to this questionnaire report, we can filter out "ST259Q01JA" and "ST259Q02JA", two columns of data that can reflect a person's socioeconomic status. But in these two columns, there is no specific data, so we cannot judge the relationship between socioeconomic status and performances.
 
+So let's do it another way. We filter out "ST005Q01JA","ST007Q01JA". It is assumed that families with highly educated parents will have a good socioeconomic status.
+
+![](images/clipboard-2172285159.png){width="436"}
+
+![](images/clipboard-2120473943.png){width="433"}
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+Related_math_read_scie_data <- Related_math_read_scie_data %>%
+  mutate(Parent_Edu_level = ST005Q01JA + ST007Q01JA)
+
+head(Related_math_read_scie_data[, c("CNTSCHID", "CNTSTUID", "ST005Q01JA", "ST007Q01JA", "Parent_Edu_level")])
+```
+
+We add these two columns together to get a new column "Parent_Edu_level", which ranges from 1 to 10, the smaller the number, the higher the education of the parents.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+df <- Related_math_read_scie_data
+
+ggplot(df, aes(x = Parent_Edu_level)) +
+  geom_point(aes(y = avg_pvMATH, color = "Math"), na.rm = TRUE) +
+  geom_smooth(aes(y = avg_pvMATH, color = "Math"), method = "lm", se = FALSE, na.rm = TRUE) +
+  geom_point(aes(y = avg_pvREAD, color = "Read"), na.rm = TRUE) +
+  geom_smooth(aes(y = avg_pvREAD, color = "Read"), method = "lm", se = FALSE, na.rm = TRUE) +
+  geom_point(aes(y = avg_pvSCIE, color = "Science"), na.rm = TRUE) +
+  geom_smooth(aes(y = avg_pvSCIE, color = "Science"), method = "lm", se = FALSE, na.rm = TRUE) +
+  labs(title = "Relationship between Performance and Socioeconomic Status",
+       x = "Socioeconomic Status (Lower values indicate higher status)",
+       y = "Average PV Score") +
+  scale_color_manual(values = c("Math" = "blue", "Read" = "green", "Science" = "red")) +
+  theme_minimal()
+```
+
+#### Insights the Relationship between Maths/Read/Science Performances and Socioeconomic Status
+
+Through this graph, we can observe that students from families of higher socioeconomic status achieve significantly better grades in all subjects than those from families of lower socioeconomic status.
+
 # Conclusion
 
-In terms of gender impact, we found some differences between the sexes across disciplines. In math, boys outperformed at the higher levels, while in reading and science, girls outperformed in some sections. This provides us with a preliminary understanding of gender on academic performance.
+Analyzing Plausible Values (math: 250-850, reading: 150-800, science: 200-850) revealed median scores of 582.41 for math, 553.63 for reading, and 571.24 for science, indicating central performance levels.
 
-Although it is difficult to distinguish significant differences between individual schools, we use the box chart to get a rough idea of the groups of students who are likely to have high scores in certain subjects at some schools. This provides a basis for further in-depth analysis at the school level.
+Gender-wise, boys dominate in math before 610, girls lead in reading below 600, and in science, boys excel before 590. Notably, girls outperform in science after this point.
 
-As can be seen from the scatter plot, the average performance of schools ranging from 70200001 to 70200165 in all three categories of math, reading and science showed a downward trend.
+The scatter plot reveals a consistent decline in average performance across math, reading, and science from school 70200001 to 70200165.
 
-Without specific figures, we cannot judge the relationship between socioeconomic status and performances.
+Higher socioeconomic status correlates with superior academic performance across all subjects.
