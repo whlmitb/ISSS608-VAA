@@ -1,5 +1,131 @@
 [
   {
+    "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html",
+    "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html",
+    "title": "Take-home Exercise 2: Enhancing Visualization: Critique, Redesign, and Remake",
+    "section": "",
+    "text": "In this take-home exercise, the task involves selecting one of the Take-home Exercise 1 submissions from a classmate and conducting a critique based on clarity and aesthetics. I select the take-home exercise 1 from Jingheng.\nAdditionally, a sketch for an alternative design will be created using data visualization design principles learned in Lesson 1 and 2.\nFinally, the original design will be remade using ggplot2, ggplot2 extensions, and tidyverse packages.\nThe dataset utilized for this exercise is sourced from the Student Questionnaire data file from the PISA 2022 database, processed through the RStudio tidyverse family of packages, and visualized using ggplot2 and its extensions."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#distribution-of-student-performance",
+    "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#distribution-of-student-performance",
+    "title": "Take-home Exercise 2: Enhancing Visualization: Critique, Redesign, and Remake",
+    "section": "3.1 Distribution of Student Performance",
+    "text": "3.1 Distribution of Student Performance\n\n3.1.1 Critique\nThe histograms of math, reading, science and total scores show the distribution of student performance.\n\n\nShow the code\nplot1 &lt;- ggplot(data = PV, aes(x = Math_Score)) +\n  geom_histogram(bins = 10, boundary = 100, color = \"blue\", fill = \"#3459e6\") +\n  ggtitle(\"Distribution of Maths scores\")+\n  theme_minimal() +\n  theme(text = element_text(size = 8),\n        plot.title = element_text(hjust = 0.5))\n\nplot2 &lt;- ggplot(data = PV, aes(x = Reading_Score)) +\n  geom_histogram(bins = 10, boundary = 100, color = \"blue\", fill = \"#3459e6\") +\n  ggtitle(\"Distribution of Reading scores\")+\n  theme_minimal() +\n  theme(text = element_text(size = 8),\n        plot.title = element_text(hjust = 0.5))\n\nplot3 &lt;- ggplot(data = PV, aes(x = Science_Score)) +\n  geom_histogram(bins = 10, boundary = 100, color = \"blue\", fill = \"#3459e6\") +\n  ggtitle(\"Distribution of Science scores\")+\n  theme_minimal() +\n  theme(text = element_text(size = 8),\n        plot.title = element_text(hjust = 0.5))\n\nplot4 &lt;- ggplot(data = PV, aes(x = Total_Score)) +\n  geom_histogram(bins = 10, boundary = 100, color = \"blue\", fill = \"#3459e6\") +\n  ggtitle(\"Distribution of Total scores\")+\n  theme_minimal() +\n  theme(text = element_text(size = 8),\n        plot.title = element_text(hjust = 0.5))\n\nplot1 + plot2 + plot3 + plot4\n\n\n\n\n\n\n\n\n\nClarity\n\nEach chart has a clear and informative title indicating the type of distribution. This helps to understand the content of each chart.\nThe X-axis label is clearly defined, indicating the corresponding score type (Math, Reading, Science, Total).\nEach histogram uses 10 bins, providing enough detail without looking too cluttered.\nThe histograms offer a restricted amount of information to the audience, primarily because it lacks the capability for sorting or labeling counts due to the continuous nature of the data. To enhance interpretation of the distribution, consider incorporating supplementary annotations, such as mean or median values.\n\nAesthetics\n\nColors chosen are clean and easily readable to the audience.\nApplying the theme_minimal() function creates a clean and concise look for all the histograms.\n\n\n\n3.1.2 Sketch of Proposed Design\n\n\n3.1.3 Remake\n\n\nShow the code\nmath_mean &lt;- mean(PV$Math_Score, na.rm = TRUE)\nreading_mean &lt;- mean(PV$Reading_Score, na.rm = TRUE)\nscience_mean &lt;- mean(PV$Science_Score, na.rm = TRUE)\ntotal_mean &lt;- mean(PV$Total_Score, na.rm = TRUE)\n\nmath_median &lt;- median(PV$Math_Score, na.rm = TRUE)\nreading_median &lt;- median(PV$Reading_Score, na.rm = TRUE)\nscience_median &lt;- median(PV$Science_Score, na.rm = TRUE)\ntotal_median &lt;- median(PV$Total_Score, na.rm = TRUE)\n\nplot1 &lt;- ggplot(data = PV, aes(x = Math_Score)) +\n  geom_histogram(bins = 10, boundary = 100, color = \"blue\", fill = \"#3459e6\") +\n  geom_vline(xintercept = math_mean, color = \"red\", linetype = \"dashed\") +\n  geom_vline(xintercept = math_median, color = \"green\", linetype = \"dashed\") +\n  annotate(\"text\", x = math_mean, y = 10, label = paste(\"Mean:\", round(math_mean, 2)), vjust = -6, color = \"red\") +\n  annotate(\"text\", x = math_median, y = 15, label = paste(\"Median:\", round(math_median, 2)), vjust = -1, color = \"green\") +\n  ggtitle(\"Distribution of Maths scores\") +\n  theme_minimal() +\n  theme(text = element_text(size = 8),\n        plot.title = element_text(hjust = 0.5))\n\nplot2 &lt;- ggplot(data = PV, aes(x = Reading_Score)) +\n  geom_histogram(bins = 10, boundary = 100, color = \"blue\", fill = \"#3459e6\") +\n  geom_vline(xintercept = reading_mean, color = \"red\", linetype = \"dashed\") +\n  geom_vline(xintercept = reading_median, color = \"green\", linetype = \"dashed\") +\n  annotate(\"text\", x = reading_mean, y = 10, label = paste(\"Mean:\", round(reading_mean, 2)), vjust = -6, color = \"red\") +\n  annotate(\"text\", x = reading_median, y = 15, label = paste(\"Median:\", round(reading_median, 2)), vjust = -1, color = \"green\") +\n  ggtitle(\"Distribution of Reading scores\") +\n  theme_minimal() +\n  theme(text = element_text(size = 8),\n        plot.title = element_text(hjust = 0.5))\n\nplot3 &lt;- ggplot(data = PV, aes(x = Science_Score)) +\n  geom_histogram(bins = 10, boundary = 100, color = \"blue\", fill = \"#3459e6\") +\n  geom_vline(xintercept = science_mean, color = \"red\", linetype = \"dashed\") +\n  geom_vline(xintercept = science_median, color = \"green\", linetype = \"dashed\") +\n  annotate(\"text\", x = science_mean, y = 10, label = paste(\"Mean:\", round(science_mean, 2)), vjust = -6, color = \"red\") +\n  annotate(\"text\", x = science_median, y = 15, label = paste(\"Median:\", round(science_median, 2)), vjust = -1, color = \"green\") +\n  ggtitle(\"Distribution of Science scores\") +\n  theme_minimal() +\n  theme(text = element_text(size = 8),\n        plot.title = element_text(hjust = 0.5))\n\nplot4 &lt;- ggplot(data = PV, aes(x = Total_Score)) +\n  geom_histogram(bins = 10, boundary = 100, color = \"blue\", fill = \"#3459e6\") +\n  geom_vline(xintercept = total_mean, color = \"red\", linetype = \"dashed\") +\n  geom_vline(xintercept = total_median, color = \"green\", linetype = \"dashed\") +\n  annotate(\"text\", x = total_mean, y = 10, label = paste(\"Mean:\", round(total_mean, 2)), vjust = -6, color = \"red\") +\n  annotate(\"text\", x = total_median, y = 15, label = paste(\"Median:\", round(total_median, 2)), vjust = -1, color = \"green\") +\n  ggtitle(\"Distribution of Total scores\") +\n  theme_minimal() +\n  theme(text = element_text(size = 8),\n        plot.title = element_text(hjust = 0.5))\n\nlibrary(gridExtra)\ngrid.arrange(plot1, plot2, plot3, plot4, ncol = 2)\n\n\n\n\n\n\n\n\n\nThe enhanced graph preserves the positive aspects of the original, including the caption and overall format, while making improvements in certain elements:\nClarity\n\nDotted lines for the median and mean were added to give the viewer more information about the center of the distribution.\nThe median and mean values are specified in each chart to enhance understanding of distribution characteristics.\nUse different colors to distinguish between the median (green) and the mean (red) lines, making them easier to identify in the graph.\n\nAesthetics\n\nColor matching is clearer, and dashed and histogram colors coordinate with each other, enhancing the overall aesthetic."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#student-performance-by-gender",
+    "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#student-performance-by-gender",
+    "title": "Take-home Exercise 2: Enhancing Visualization: Critique, Redesign, and Remake",
+    "section": "3.2 Student Performance by Gender",
+    "text": "3.2 Student Performance by Gender\n\n3.2.1 Critique\nThe density plots compare academic performance distribution across genders.\n\n\nShow the code\nplot1 &lt;- ggplot(data = PV, aes(x = Math_Score, fill = Gender)) +\n  geom_density(alpha = 0.7, position = \"identity\", stat = \"density\") +  \n   scale_fill_manual(values = c(\"Female\" = \"#FF5733\", \"Male\" = \"#3459e6\")) +\n  labs(title = \"Math Scores by Gender\") +\n  theme(legend.position = \"none\") +\n  scale_y_continuous(labels = scales::percent) +\n  theme_minimal() +\n  theme(text = element_text(size = 8), plot.title = element_text(hjust = 0.5))\n\nplot2 &lt;- ggplot(data = PV, aes(x = Reading_Score, fill = Gender)) +\n  geom_density(alpha = 0.7, position = \"identity\", stat = \"Density\") +\n  scale_fill_manual(values = c(\"Female\" = \"#FF5733\", \"Male\" = \"#3459e6\")) +\n  labs(title = \"Reading Scores by Gender\") +\n  theme(legend.position = \"none\") +\n  scale_y_continuous(labels = scales::percent)+\n  theme_minimal() +\n  theme(text = element_text(size = 8),\n        plot.title = element_text(hjust = 0.5))\n\nplot3 &lt;- ggplot(data = PV, aes(x = Science_Score, fill = Gender)) +\n  geom_density(alpha = 0.7, position = \"identity\", stat = \"Density\") +\n  scale_fill_manual(values = c(\"Female\" = \"#FF5733\", \"Male\" = \"#3459e6\")) +\n  labs(title = \"Science Scores by Gender\") +\n  theme(legend.position = \"none\") +\n  scale_y_continuous(labels = scales::percent)+\n  theme_minimal() +\n  theme(text = element_text(size = 8),\n        plot.title = element_text(hjust = 0.5))\n\nplot4 &lt;- ggplot(data = PV, aes(x = Total_Score, fill = Gender)) +\n  geom_density(alpha = 0.7, position = \"identity\", stat = \"density\") +\n  scale_fill_manual(values = c(\"Female\" = \"#FF5733\", \"Male\" = \"#3459e6\")) +\n  labs(title = \"Total Scores by Gender\") + \n  scale_y_continuous(labels = scales::percent)+\n  theme_minimal() +\n  theme(text = element_text(size = 8),\n        plot.title = element_text(hjust = 0.5))\n\ncombined_plots &lt;- plot1 + plot2 + plot3 + plot4 +\n  plot_layout(guides = \"collect\")\n\ncombined_plots\n\n\n\n\n\n\n\n\n\nClarity\n\nThe chart clearly shows the distribution of results by subject and gender, making it easy for viewers to understand the main objectives of the chart.\nEach chart has a clear title, indicating the corresponding subject and gender, so that the audience can quickly understand the content of the chart.\nThe use of dark blue and orange-red color scheme effectively distinguishes the density map of different genders and subjects, so that the audience can intuitively identify the different groups.\nThe Y axis uses a percentage scale to help you understand the relative proportions of density more clearly.\nHowever, compared with the density plot, the histogram more intuitively presents the relationship between gender and student performance. The interpretation of histograms is directly based on frequency or frequency, which makes comparison and interpretation relatively simple. The audience can understand it more easily.\n\nAesthetics - The dark blue and orange red color matching is relatively bright, highlighting the characteristics of different genders and subjects, and the visual effect is good.\n\nThe transparency setting (alpha = 0.7) is used to make the density map overlay more layered and improve the aesthetic.\nBy adding legends and headings to each chart, the chart is made more readable and aesthetic.\n\n\n\n3.2.2 Sketch of Proposed Design\n\n\n3.2.3 Remake\n\n\nShow the code\nadd_mean_annotation &lt;- function(plot, score_column) {\n  mean_value &lt;- mean(PV[[score_column]], na.rm = TRUE)\n  \n  plot + \n    geom_vline(xintercept = mean_value, color = \"red\", linetype = \"dashed\") +\n    annotate(\"text\", x = mean_value, y = 10, \n             label = paste(\"Mean:\", round(mean_value, 2)), \n             vjust = -1, color = \"red\")\n}\n\nhist_plot1 &lt;- ggplot(data = PV, aes(x = Math_Score, fill = Gender)) +\n  geom_histogram(alpha = 0.7, position = \"identity\", bins = 20, color = \"white\") +  \n  scale_fill_manual(values = c(\"Female\" = \"#FF5733\", \"Male\" = \"#3459e6\")) +\n  labs(title = \"Math Scores by Gender\") +\n  theme_minimal() +\n  theme(text = element_text(size = 8), plot.title = element_text(hjust = 0.5))\n\nhist_plot1 &lt;- add_mean_annotation(hist_plot1, \"Math_Score\")\n\nhist_plot2 &lt;- ggplot(data = PV, aes(x = Reading_Score, fill = Gender)) +\n  geom_histogram(alpha = 0.7, position = \"identity\", bins = 20, color = \"white\") +\n  scale_fill_manual(values = c(\"Female\" = \"#FF5733\", \"Male\" = \"#3459e6\")) +\n  labs(title = \"Reading Scores by Gender\") +\n  theme_minimal() +\n  theme(text = element_text(size = 8), plot.title = element_text(hjust = 0.5))\n\nhist_plot2 &lt;- add_mean_annotation(hist_plot2, \"Reading_Score\")\n\nhist_plot3 &lt;- ggplot(data = PV, aes(x = Science_Score, fill = Gender)) +\n  geom_histogram(alpha = 0.7, position = \"identity\", bins = 20, color = \"white\") +\n  scale_fill_manual(values = c(\"Female\" = \"#FF5733\", \"Male\" = \"#3459e6\")) +\n  labs(title = \"Science Scores by Gender\") +\n  theme_minimal() +\n  theme(text = element_text(size = 8), plot.title = element_text(hjust = 0.5))\n\nhist_plot3 &lt;- add_mean_annotation(hist_plot3, \"Science_Score\")\n\nhist_plot4 &lt;- ggplot(data = PV, aes(x = Total_Score, fill = Gender)) +\n  geom_histogram(alpha = 0.7, position = \"identity\", bins = 20, color = \"white\") +\n  scale_fill_manual(values = c(\"Female\" = \"#FF5733\", \"Male\" = \"#3459e6\")) +\n  labs(title = \"Total Scores by Gender\") + \n  theme_minimal() +\n  theme(text = element_text(size = 8), plot.title = element_text(hjust = 0.5))\n\nhist_plot4 &lt;- add_mean_annotation(hist_plot4, \"Total_Score\")\n\ncombined_hist_plots &lt;- hist_plot1 + hist_plot2 + hist_plot3 + hist_plot4 +\n  plot_layout(guides = \"collect\")\n\ncombined_hist_plots\n\n\n\n\n\n\n\n\n\nThe enhanced graph preserves the positive aspects of the original, including the caption and overall format, while making improvements in certain elements:\nClarity\n\nAdding dashed lines and text notes to the averages enhances the amount of information in the chart, making it easier for viewers to understand the central trend of the data.\nThe use of 20 bin and different colors provides clear histogram visuals for each gender, helping to observe the distribution.\n\nAesthetics\n\nBright colors were chosen to make the histogram of the different genders clearly distinguishable in the chart. However, the red font of the mean is not obvious in this graph, but this is to correspond to the mean in Figure 3.1.3, because the color has not been changed."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#student-performance-by-school",
+    "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#student-performance-by-school",
+    "title": "Take-home Exercise 2: Enhancing Visualization: Critique, Redesign, and Remake",
+    "section": "3.3 Student Performance by School",
+    "text": "3.3 Student Performance by School\n\n3.3.1 Critique\nThe box plots show the distribution of school average scores in each subject.\n\n\nShow the code\nSchool_Avg_Scores &lt;- PV %&gt;%\n  group_by(CNTSCHID) %&gt;%\n  summarize(\n    Avg_Math_Score = mean(Math_Score, na.rm = TRUE),\n    Avg_Reading_Score = mean(Reading_Score, na.rm = TRUE),\n    Avg_Science_Score = mean(Science_Score, na.rm = TRUE),\n    Avg_Score = mean(Total_Score/3, na.rm = TRUE)\n  )\nSchool_Avg_Scores_subjects &lt;- School_Avg_Scores %&gt;%\n  select(CNTSCHID, starts_with(\"Avg_Math\"), starts_with(\"Avg_Reading\"), starts_with(\"Avg_Science\"),starts_with(\"Avg_Score\"))\nSchool_Avg_Scores_long &lt;- School_Avg_Scores_subjects %&gt;%\n  pivot_longer(cols = -CNTSCHID, names_to = \"Subject\", values_to = \"Score\")\n\n\n\n\nShow the code\noutliers_data &lt;- School_Avg_Scores %&gt;%\n  pivot_longer(cols = starts_with(\"Avg_\"), names_to = \"Subject\", values_to = \"Score\") %&gt;%\n  group_by(Subject) %&gt;%\n  arrange(Score) %&gt;%\n  slice(c(1:2, (n() - 3):(n())))\n\nggplot(School_Avg_Scores_long, aes(x = Subject, y = Score, fill = Subject)) +\n  geom_boxplot(fill = \"#3459e6\") +\n  geom_text_repel(data = outliers_data, aes(label = CNTSCHID), \n                  position = position_dodge(width = 1), \n                  box.padding = 0.8, \n                  force = 1, \n                  segment.color = \"grey50\", \n                  size = 2) +  # Use ggrepel's geom_text_repel\n  labs(title = \"Boxplot of Average Scores for Each Subject\", x = \"\", y = \"\") +\n  theme_minimal() +\n  theme(text = element_text(size = 10),\n        plot.title = element_text(hjust = 0.5))\n\n\n\n\n\n\n\n\n\nClarity\nAesthetics \n\n\n3.3.2 Not to remake(Just suggustion)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#section",
+    "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#section",
+    "title": "Take-home Exercise 2: Enhancing Visualization: Critique, Redesign, and Remake",
+    "section": "3.4",
+    "text": "3.4\n\n3.4.1 Critique\nClarity Aesthetics ### 3.4.2 Sketch of Proposed Design ### 3.4.3 Remake Clarity Aesthetics"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#section-1",
+    "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#section-1",
+    "title": "Take-home Exercise 2: Enhancing Visualization: Critique, Redesign, and Remake",
+    "section": "3.5",
+    "text": "3.5\n\n3.5.1 Critique\nClarity Aesthetics ### 3.5.2 Sketch of Proposed Design ### 3.5.3 Remake Clarity Aesthetics"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ISSS608-VAA",
+    "section": "",
+    "text": "Welcome to ISSS608 Visual Analytics and Applications homepage. In this website, you will find my coursework prepared for this course. ```"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
+    "title": "In-class Exercise 1 :Now you see it!",
+    "section": "",
+    "text": "In this hands-on exercise, two R packages will be used. They are:\n\ntidyverse, and\nhaven\n\nThe code chunk used is as follows:\n\npacman::p_load(tidyverse, haven)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#loading-r-packages",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#loading-r-packages",
+    "title": "In-class Exercise 1 :Now you see it!",
+    "section": "",
+    "text": "In this hands-on exercise, two R packages will be used. They are:\n\ntidyverse, and\nhaven\n\nThe code chunk used is as follows:\n\npacman::p_load(tidyverse, haven)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#importing-pisa-data",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#importing-pisa-data",
+    "title": "In-class Exercise 1 :Now you see it!",
+    "section": "Importing PISA data",
+    "text": "Importing PISA data\nThe code chunk below uses read_sas() of haven to import PISA data into R environment.\n\n# eval: false\nstu_qqq &lt;- read_sas(\"data/cy08msp_stu_qqq.sas7bdat\")\n\n\n# eval: false\nstu_qqq_SG &lt;- stu_qqq %&gt;% \n  filter(CNT ==\"SGP\")\n\n\n# eval: false\nwrite_rds(stu_qqq_SG,\n          \"data/stu_qqq_SG.rds\")\n\n\nstu_qqq_SG &lt;- \nread_rds(\"data/stu_qqq_SG.rds\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html",
+    "title": "Hands-on Exercise 1",
+    "section": "",
+    "text": "The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.\n\npacman::p_load(tidyverse)\n\n\n\n\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#install-and-launching-r-packages",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#install-and-launching-r-packages",
+    "title": "Hands-on Exercise 1",
+    "section": "",
+    "text": "The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.\n\npacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#importing-the-data",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#importing-the-data",
+    "title": "Hands-on Exercise 1",
+    "section": "",
+    "text": "exam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html",
+    "title": "Hands-on Exercise 2 : Enhancing Statistical Graphics with ggplot2 Extensions",
+    "section": "",
+    "text": "In this hands-on exercise 2, beside tidyverse, four R packages will be used. They are:\n\ntidyverse, and\n[ggrepel]\nggthemes\n[hrbrthemes]\n[patchwork]\n\nThe code chunk used is as follows:\n\npacman::p_load(ggrepel, patchwork, \n               ggthemes, hrbrthemes,\n               tidyverse)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#loading-r-packages",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#loading-r-packages",
+    "title": "Hands-on Exercise 2 : Enhancing Statistical Graphics with ggplot2 Extensions",
+    "section": "",
+    "text": "In this hands-on exercise 2, beside tidyverse, four R packages will be used. They are:\n\ntidyverse, and\n[ggrepel]\nggthemes\n[hrbrthemes]\n[patchwork]\n\nThe code chunk used is as follows:\n\npacman::p_load(ggrepel, patchwork, \n               ggthemes, hrbrthemes,\n               tidyverse)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#importing-the-data",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#importing-the-data",
+    "title": "Hands-on Exercise 2 : Enhancing Statistical Graphics with ggplot2 Extensions",
+    "section": "Importing the data",
+    "text": "Importing the data\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#overview-of-the-data",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#overview-of-the-data",
+    "title": "Hands-on Exercise 2 : Enhancing Statistical Graphics with ggplot2 Extensions",
+    "section": "Overview of the data",
+    "text": "Overview of the data\n\nsummary(exam_data)\n\n      ID               CLASS              GENDER              RACE          \n Length:322         Length:322         Length:322         Length:322        \n Class :character   Class :character   Class :character   Class :character  \n Mode  :character   Mode  :character   Mode  :character   Mode  :character  \n                                                                            \n                                                                            \n                                                                            \n    ENGLISH          MATHS          SCIENCE     \n Min.   :21.00   Min.   : 9.00   Min.   :15.00  \n 1st Qu.:59.00   1st Qu.:58.00   1st Qu.:49.25  \n Median :70.00   Median :74.00   Median :65.00  \n Mean   :67.18   Mean   :69.33   Mean   :61.16  \n 3rd Qu.:78.00   3rd Qu.:85.00   3rd Qu.:74.75  \n Max.   :96.00   Max.   :99.00   Max.   :96.00"
+  },
+  {
     "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html",
     "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html",
     "title": "Take-home Exercise 1 : Exploring Academic Performance Patterns: An In-Depth Analysis of Singaporean Students in PISA 2022.",
@@ -33,89 +159,5 @@
     "title": "Take-home Exercise 1 : Exploring Academic Performance Patterns: An In-Depth Analysis of Singaporean Students in PISA 2022.",
     "section": "Plotting a simple bar chart",
     "text": "Plotting a simple bar chart\nWe first looked at the data in general to see the overall distribution of math, reading, and science average plausible values. Through visualization methods such as histograms and box graphs, we have clarified the range of students’ performance in various subjects.\n\nMaths/Read/Science Distributions\n\n\nShow the code\np1 &lt;- ggplot(data=Related_math_read_scie_data, aes(x = avg_pvMATH)) +\n  geom_histogram(bins=10, \n                 boundary = 100,\n                 color=\"black\", \n                 fill=\"grey\") +\n  geom_vline(aes(xintercept = median(avg_pvMATH)), color = \"red\", linetype = \"dashed\") +\n  annotate(\"text\", x = median(Related_math_read_scie_data$avg_pvMATH), y = 30, \n           label = paste(\"Median:\", round(median(Related_math_read_scie_data$avg_pvMATH), 2)), \n           vjust = 1, color = \"red\") +\n  labs(y = \"Count\")\n\np2 &lt;- ggplot(data=Related_math_read_scie_data, aes(x = avg_pvREAD)) +\n  geom_histogram(bins=10, \n                 boundary = 100,\n                 color=\"black\", \n                 fill=\"grey\") +\n  geom_vline(aes(xintercept = median(avg_pvREAD)), color = \"red\", linetype = \"dashed\") +\n  annotate(\"text\", x = median(Related_math_read_scie_data$avg_pvREAD), y = 30, \n           label = paste(\"Median:\", round(median(Related_math_read_scie_data$avg_pvREAD), 2)), \n           vjust = 1, color = \"red\") +\n  labs(y = \"Count\")\n\np3 &lt;- ggplot(data=Related_math_read_scie_data, aes(x = avg_pvSCIE)) +\n  geom_histogram(bins=10, \n                 boundary = 100,\n                 color=\"black\", \n                 fill=\"grey\") +\n  geom_vline(aes(xintercept = median(avg_pvSCIE)), color = \"red\", linetype = \"dashed\") +\n  annotate(\"text\", x = median(Related_math_read_scie_data$avg_pvSCIE), y = 30, \n           label = paste(\"Median:\", round(median(Related_math_read_scie_data$avg_pvSCIE), 2)), \n           vjust = 1, color = \"red\") +\n  labs(y = \"Count\")\n\np1 + p2 + p3 +\n  plot_layout(guides = \"collect\") +\n  plot_annotation(title = \"Distributions of Maths/Reading/Science with Median Lines\", tag_levels = \"I\")\n\n\n\n\n\n\n\n\n\n\nInsights from Visualisations by Distributions\nAnalyzing average Plausible Values for math (250-850), reading (150-800), and science (200-850),respectively. The median math mean confidence was 582.41, meaning that about half of the students had an average confidence of less than or greater than 582.41. Similar trends exist in reading and science. The median reading average confidence was 553.63. The median scientific average confidence value is 571.24. These medians are an important indicator of where the average performance is.\n\n\n\nThe Relationship between Gender and Performances\nIn general, gender coding conventions, 1 means male and 2 means female.\n\n\nShow the code\np4 &lt;- ggplot(data = Related_math_read_scie_data, aes(x = avg_pvMATH, fill = factor(ST004D01T))) +\n  geom_histogram(bins = 10, color = \"grey30\", position = \"identity\", alpha = 0.7) +\n  labs(x = \"avg_pvMATH\", y = \"Count\", fill = \"Gender\") +\n  scale_fill_manual(values = c(\"skyblue\", \"pink\"))\n\np5 &lt;- ggplot(data = Related_math_read_scie_data, aes(x = avg_pvREAD, fill = factor(ST004D01T))) +\n  geom_histogram(bins = 10, color = \"grey30\", position = \"identity\", alpha = 0.7) +\n  labs(x = \"avg_pvREAD\", y = \"Count\", fill = \"Gender\") +\n  scale_fill_manual(values = c(\"skyblue\", \"pink\"))\n\np6 &lt;- ggplot(data = Related_math_read_scie_data, aes(x = avg_pvSCIE, fill = factor(ST004D01T))) +\n  geom_histogram(bins = 10, color = \"grey30\", position = \"identity\", alpha = 0.7) +\n  labs(x = \"avg_pvSCIE\", y = \"Count\", fill = \"Gender\") +\n  scale_fill_manual(values = c(\"skyblue\", \"pink\"))\n\np4 + p5 + p6 +\n  plot_layout(guides = \"collect\") +\n  plot_annotation(title = \"The Relationship between Gender and Performances\", tag_levels = \"I\")\n\n\n\n\n\n\n\n\n\n\nInsights the Relationship between Maths/Read/Science Performances and Gender\nGender-related insights from visualizations show variations in Plausible Values. In mathematics, boys exhibit higher values before around 610, with girls dominating afterward. In reading, girls perform better in the lower range (before 600), while boys excel in the higher range (after 600). Similarly, in science, boys show higher values before about 590, and girls dominate afterward, indicating differing gender performance levels across subjects.\n\n\n\nThe Relationship between School and Performances\nWhen using “avg_pvMATH”, “avg_pvREAD”, “avg_pvREAD” values for all students in a school, it is difficult to get an accurate picture of the relative strengths and weaknesses of each school’s score distribution due to the large number of schools and students involved.\nTherefore, we average the “avg_pvMATH” of all students in each school to get the school’s “avg_pvMATH_school”. In this way we can get a clearer picture of the impact of school on the relationship between performance and school.\n\n\nShow the code\nRelated_math_read_scie_data &lt;- Related_math_read_scie_data %&gt;% \n  group_by(CNTSCHID) %&gt;%\n  mutate(avg_pvMATH_school = mean(avg_pvMATH, na.rm = TRUE))\n\nRelated_math_read_scie_data &lt;- Related_math_read_scie_data %&gt;% \n  group_by(CNTSCHID) %&gt;%\n  mutate(avg_pvREAD_school = mean(avg_pvREAD, na.rm = TRUE))\n\nRelated_math_read_scie_data &lt;- Related_math_read_scie_data %&gt;% \n  group_by(CNTSCHID) %&gt;%\n  mutate(avg_pvSCIE_school = mean(avg_pvSCIE, na.rm = TRUE))\n\nRelated_math_read_scie_data %&gt;%\n  select(CNTSCHID, CNTSTUID,avg_pvMATH_school, avg_pvREAD_school, avg_pvSCIE_school) %&gt;%\n  head(5)\n\n\n# A tibble: 5 × 5\n# Groups:   CNTSCHID [5]\n  CNTSCHID CNTSTUID avg_pvMATH_school avg_pvREAD_school avg_pvSCIE_school\n     &lt;dbl&gt;    &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;\n1 70200052 70200001              581.              598.              585.\n2 70200134 70200002              523.              487.              519.\n3 70200112 70200003              588.              549.              581.\n4 70200004 70200004              510.              480.              494.\n5 70200152 70200005              485.              468.              481.\n\n\n\n\nShow the code\np7 &lt;- ggplot(data = Related_math_read_scie_data, \n             aes(x = CNTSCHID, \n                 y = avg_pvMATH_school)) +\n  geom_point() +\n  geom_smooth(formula = y~x, method = lm, \n              size = 0.5) +  \n  labs(x = \"School ID\", y = \"Average PV Maths\")\n\np8 &lt;- ggplot(data = Related_math_read_scie_data, \n             aes(x = CNTSCHID, \n                 y = avg_pvREAD_school)) +\n  geom_point() +\n  geom_smooth(formula = y~x, method = lm, \n              size = 0.5) +\n  labs(x = \"School ID\", y = \"Average PV Read\")\n\np9 &lt;- ggplot(data = Related_math_read_scie_data, \n             aes(x = CNTSCHID, \n                 y = avg_pvSCIE_school)) +\n  geom_point() +\n  geom_smooth(formula = y~x, method = lm, \n              size = 0.5) +  \n  labs(x = \"School ID\", y = \"Average PV Scie\")\n\np7 + p8 + p9 +\n    plot_layout(guides = \"collect\") +\n  plot_annotation(title = \"The Relationship between School and Performances\", tag_levels = \"I\")\n\n\n\n\n\n\n\n\n\n\nInsights the Relationship between Maths/Read/Science Performances and School ID\nUsing this scatter plot, we notice a decreasing trend in average performance in math, reading, and science for school numbers ranging from 70200001 to 70200165. This shows that whether it is math, reading or science, the students in school 70200001 are the best, and it decreases all the way to school 70200165, which is the students in school 70200165 are the worst.\n\n\n\nThe Relationship between Socioeconomic Status and Performances\n\nComputer-Based Student Questionnaire for Pisa 2022 - Main Survey Version\n\n\n\n\nShow the code\nRelated_math_read_scie_data %&gt;%\n  select(CNTSCHID, CNTSTUID, ST259Q01JA, ST259Q02JA) %&gt;%\n  head(5)\n\n\n# A tibble: 5 × 4\n# Groups:   CNTSCHID [5]\n  CNTSCHID CNTSTUID ST259Q01JA ST259Q02JA\n     &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1 70200052 70200001         NA         NA\n2 70200134 70200002         NA         NA\n3 70200112 70200003         NA         NA\n4 70200004 70200004         NA         NA\n5 70200152 70200005         NA         NA\n\n\nAccording to this questionnaire report, we can filter out “ST259Q01JA” and “ST259Q02JA”, two columns of data that can reflect a person’s socioeconomic status. But in these two columns, there is no specific data, so we cannot judge the relationship between socioeconomic status and performances.\nSo let’s do it another way. We filter out “ST005Q01JA”,“ST007Q01JA”. It is assumed that families with highly educated parents will have a good socioeconomic status.\n\n\n\n\nShow the code\nRelated_math_read_scie_data &lt;- Related_math_read_scie_data %&gt;%\n  mutate(Parent_Edu_level = ST005Q01JA + ST007Q01JA)\n\nhead(Related_math_read_scie_data[, c(\"CNTSCHID\", \"CNTSTUID\", \"ST005Q01JA\", \"ST007Q01JA\", \"Parent_Edu_level\")])\n\n\n# A tibble: 6 × 5\n# Groups:   CNTSCHID [6]\n  CNTSCHID CNTSTUID ST005Q01JA ST007Q01JA Parent_Edu_level\n     &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;            &lt;dbl&gt;\n1 70200052 70200001          2          2                4\n2 70200134 70200002          2          2                4\n3 70200112 70200003          2          2                4\n4 70200004 70200004          2          4                6\n5 70200152 70200005          2          2                4\n6 70200043 70200006          2          2                4\n\n\nWe add these two columns together to get a new column “Parent_Edu_level”, which ranges from 1 to 10, the smaller the number, the higher the education of the parents.\n\n\nShow the code\ndf &lt;- Related_math_read_scie_data\n\nggplot(df, aes(x = Parent_Edu_level)) +\n  geom_point(aes(y = avg_pvMATH, color = \"Math\"), na.rm = TRUE) +\n  geom_smooth(aes(y = avg_pvMATH, color = \"Math\"), method = \"lm\", se = FALSE, na.rm = TRUE) +\n  geom_point(aes(y = avg_pvREAD, color = \"Read\"), na.rm = TRUE) +\n  geom_smooth(aes(y = avg_pvREAD, color = \"Read\"), method = \"lm\", se = FALSE, na.rm = TRUE) +\n  geom_point(aes(y = avg_pvSCIE, color = \"Science\"), na.rm = TRUE) +\n  geom_smooth(aes(y = avg_pvSCIE, color = \"Science\"), method = \"lm\", se = FALSE, na.rm = TRUE) +\n  labs(title = \"Relationship between Performance and Socioeconomic Status\",\n       x = \"Socioeconomic Status (Lower values indicate higher status)\",\n       y = \"Average PV Score\") +\n  scale_color_manual(values = c(\"Math\" = \"blue\", \"Read\" = \"green\", \"Science\" = \"red\")) +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\n\nInsights the Relationship between Maths/Read/Science Performances and Socioeconomic Status\nThrough this graph, we can observe that students from families of higher socioeconomic status achieve significantly better grades in all subjects than those from families of lower socioeconomic status."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html",
-    "title": "Hands-on Exercise 2 : Enhancing Statistical Graphics with ggplot2 Extensions",
-    "section": "",
-    "text": "In this hands-on exercise 2, beside tidyverse, four R packages will be used. They are:\n\ntidyverse, and\n[ggrepel]\nggthemes\n[hrbrthemes]\n[patchwork]\n\nThe code chunk used is as follows:\n\npacman::p_load(ggrepel, patchwork, \n               ggthemes, hrbrthemes,\n               tidyverse)"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#loading-r-packages",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#loading-r-packages",
-    "title": "Hands-on Exercise 2 : Enhancing Statistical Graphics with ggplot2 Extensions",
-    "section": "",
-    "text": "In this hands-on exercise 2, beside tidyverse, four R packages will be used. They are:\n\ntidyverse, and\n[ggrepel]\nggthemes\n[hrbrthemes]\n[patchwork]\n\nThe code chunk used is as follows:\n\npacman::p_load(ggrepel, patchwork, \n               ggthemes, hrbrthemes,\n               tidyverse)"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#importing-the-data",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#importing-the-data",
-    "title": "Hands-on Exercise 2 : Enhancing Statistical Graphics with ggplot2 Extensions",
-    "section": "Importing the data",
-    "text": "Importing the data\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#overview-of-the-data",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#overview-of-the-data",
-    "title": "Hands-on Exercise 2 : Enhancing Statistical Graphics with ggplot2 Extensions",
-    "section": "Overview of the data",
-    "text": "Overview of the data\n\nsummary(exam_data)\n\n      ID               CLASS              GENDER              RACE          \n Length:322         Length:322         Length:322         Length:322        \n Class :character   Class :character   Class :character   Class :character  \n Mode  :character   Mode  :character   Mode  :character   Mode  :character  \n                                                                            \n                                                                            \n                                                                            \n    ENGLISH          MATHS          SCIENCE     \n Min.   :21.00   Min.   : 9.00   Min.   :15.00  \n 1st Qu.:59.00   1st Qu.:58.00   1st Qu.:49.25  \n Median :70.00   Median :74.00   Median :65.00  \n Mean   :67.18   Mean   :69.33   Mean   :61.16  \n 3rd Qu.:78.00   3rd Qu.:85.00   3rd Qu.:74.75  \n Max.   :96.00   Max.   :99.00   Max.   :96.00"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html",
-    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html",
-    "title": "Hands-on Exercise 1",
-    "section": "",
-    "text": "The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.\n\npacman::p_load(tidyverse)\n\n\n\n\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#install-and-launching-r-packages",
-    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#install-and-launching-r-packages",
-    "title": "Hands-on Exercise 1",
-    "section": "",
-    "text": "The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.\n\npacman::p_load(tidyverse)"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#importing-the-data",
-    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#importing-the-data",
-    "title": "Hands-on Exercise 1",
-    "section": "",
-    "text": "exam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
-    "title": "In-class Exercise 1 :Now you see it!",
-    "section": "",
-    "text": "In this hands-on exercise, two R packages will be used. They are:\n\ntidyverse, and\nhaven\n\nThe code chunk used is as follows:\n\npacman::p_load(tidyverse, haven)"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#loading-r-packages",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#loading-r-packages",
-    "title": "In-class Exercise 1 :Now you see it!",
-    "section": "",
-    "text": "In this hands-on exercise, two R packages will be used. They are:\n\ntidyverse, and\nhaven\n\nThe code chunk used is as follows:\n\npacman::p_load(tidyverse, haven)"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#importing-pisa-data",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#importing-pisa-data",
-    "title": "In-class Exercise 1 :Now you see it!",
-    "section": "Importing PISA data",
-    "text": "Importing PISA data\nThe code chunk below uses read_sas() of haven to import PISA data into R environment.\n\n# eval: false\nstu_qqq &lt;- read_sas(\"data/cy08msp_stu_qqq.sas7bdat\")\n\n\n# eval: false\nstu_qqq_SG &lt;- stu_qqq %&gt;% \n  filter(CNT ==\"SGP\")\n\n\n# eval: false\nwrite_rds(stu_qqq_SG,\n          \"data/stu_qqq_SG.rds\")\n\n\nstu_qqq_SG &lt;- \nread_rds(\"data/stu_qqq_SG.rds\")"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "ISSS608-VAA",
-    "section": "",
-    "text": "Welcome to ISSS608 Visual Analytics and Applications homepage. In this website, you will find my coursework prepared for this course. ```"
   }
 ]
