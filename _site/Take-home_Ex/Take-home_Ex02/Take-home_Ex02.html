@@ -214,15 +214,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#student-performance-by-school" id="toc-student-performance-by-school" class="nav-link" data-scroll-target="#student-performance-by-school">3.3 Student Performance by School</a>
   <ul class="collapse">
   <li><a href="#critique-2" id="toc-critique-2" class="nav-link" data-scroll-target="#critique-2">3.3.1 Critique</a></li>
-  <li><a href="#not-to-remakejust-suggustion" id="toc-not-to-remakejust-suggustion" class="nav-link" data-scroll-target="#not-to-remakejust-suggustion">3.3.2 Not to remake(Just suggustion)</a></li>
+  <li><a href="#not-to-remake-just-rerun-code" id="toc-not-to-remake-just-rerun-code" class="nav-link" data-scroll-target="#not-to-remake-just-rerun-code">3.3.2 Not to remake( Just rerun code)</a></li>
   </ul></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section">3.4</a>
+  <li><a href="#student-performance-by-musical-instruments" id="toc-student-performance-by-musical-instruments" class="nav-link" data-scroll-target="#student-performance-by-musical-instruments">3.4 Student Performance by Musical Instruments</a>
   <ul class="collapse">
   <li><a href="#critique-3" id="toc-critique-3" class="nav-link" data-scroll-target="#critique-3">3.4.1 Critique</a></li>
+  <li><a href="#sketch-of-proposed-design-2" id="toc-sketch-of-proposed-design-2" class="nav-link" data-scroll-target="#sketch-of-proposed-design-2">3.4.2 Sketch of Proposed Design</a></li>
+  <li><a href="#remake-2" id="toc-remake-2" class="nav-link" data-scroll-target="#remake-2">3.4.3 Remake</a></li>
   </ul></li>
-  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1">3.5</a>
+  <li><a href="#student-performance-by-own-room" id="toc-student-performance-by-own-room" class="nav-link" data-scroll-target="#student-performance-by-own-room">3.5 Student Performance by Own room</a>
   <ul class="collapse">
   <li><a href="#critique-4" id="toc-critique-4" class="nav-link" data-scroll-target="#critique-4">3.5.1 Critique</a></li>
+  <li><a href="#sketch-of-proposed-design-3" id="toc-sketch-of-proposed-design-3" class="nav-link" data-scroll-target="#sketch-of-proposed-design-3">3.5.2 Sketch of Proposed Design</a></li>
+  <li><a href="#remake-3" id="toc-remake-3" class="nav-link" data-scroll-target="#remake-3">3.5.3 Remake</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#learning-points" id="toc-learning-points" class="nav-link" data-scroll-target="#learning-points">4. Learning Points</a></li>
@@ -619,7 +623,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="student-performance-by-school">3.3 Student Performance by School</h2>
 <section id="critique-2" class="level3">
 <h3 class="anchored" data-anchor-id="critique-2">3.3.1 Critique</h3>
-<p>The box plots show the distribution of school average scores in each subject.</p>
+<p>The box plot shows the distribution of average school scores for each subject.</p>
+<p>Although it is appropriate to use a boxplot here, there is a data error when the author executes the code because the school ID ranges from 70200001 to 70200165.</p>
+<p>Obviously, there was a problem with the author’s data, which caused the final graphical presentation to be biased. So, I’ll re-run this code to show the correct chart.</p>
+<p><img src="images/clipboard-2911149338.png" class="img-fluid"></p>
+</section>
+<section id="not-to-remake-just-rerun-code" class="level3">
+<h3 class="anchored" data-anchor-id="not-to-remake-just-rerun-code">3.3.2 Not to remake( Just rerun code)</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
@@ -668,29 +678,267 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p><strong>Clarity</strong></p>
-<p><strong>Aesthetics </strong></p>
+<ul>
+<li><p>Box plots clearly present the average distribution of each subject and provide an effective summary of the school’s average scores.</p></li>
+<li><p>Clear axis labels and clear chart titles help viewers understand the content of the chart.</p></li>
+<li><p>The outliers are clearly labeled using geom_text_repel() to make them easy to identify.</p></li>
+</ul>
+<p><strong>Aesthetics</strong></p>
+<ul>
+<li><p>The use of bright blue padding enhances visual appeal and helps distinguish between subjects.</p></li>
+<li><p>The font size is appropriate, and the font size for the outliers is appropriate, although the color choice may require further consideration to ensure legibility.</p></li>
+<li><p>The overall layout is reasonable, and the boxplot is effectively organized on the X-axis and arranged in an orderly manner, making the chart easier to read.</p></li>
+</ul>
 </section>
-<section id="not-to-remakejust-suggustion" class="level3">
-<h3 class="anchored" data-anchor-id="not-to-remakejust-suggustion">3.3.2 Not to remake(Just suggustion)</h3>
 </section>
-</section>
-<section id="section" class="level2">
-<h2 class="anchored" data-anchor-id="section">3.4</h2>
+<section id="student-performance-by-musical-instruments" class="level2">
+<h2 class="anchored" data-anchor-id="student-performance-by-musical-instruments">3.4 Student Performance by Musical Instruments</h2>
 <section id="critique-3" class="level3">
 <h3 class="anchored" data-anchor-id="critique-3">3.4.1 Critique</h3>
-<p>Clarity Aesthetics ### 3.4.2 Sketch of Proposed Design ### 3.4.3 Remake Clarity Aesthetics</p>
+<p>This scatter plot shows the relationship between students’ math, reading, science, and overall performance and the amount of music equipment they own, while fitting the linear regression line to show this relationship.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>plot_math <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>PV, <span class="fu">aes</span>(<span class="at">x=</span>mi_num, <span class="at">y=</span>Math_Score)) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color=</span><span class="st">"#3459e6"</span>) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm, <span class="at">size=</span><span class="fl">0.5</span>,<span class="at">color =</span> <span class="st">"#FF5733"</span>) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Math Score by Musical instruments"</span>, <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>plot_reading <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>PV, <span class="fu">aes</span>(<span class="at">x=</span>mi_num, <span class="at">y=</span>Reading_Score)) <span class="sc">+</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color=</span><span class="st">"#3459e6"</span>) <span class="sc">+</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm, <span class="at">size=</span><span class="fl">0.5</span>,<span class="at">color =</span> <span class="st">"#FF5733"</span>) <span class="sc">+</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Reading Score by Musical instruments"</span>, <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>plot_science <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>PV, <span class="fu">aes</span>(<span class="at">x=</span>mi_num, <span class="at">y=</span>Science_Score)) <span class="sc">+</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color=</span><span class="st">"#3459e6"</span>) <span class="sc">+</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm, <span class="at">size=</span><span class="fl">0.5</span>,<span class="at">color =</span> <span class="st">"#FF5733"</span>) <span class="sc">+</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Science Score by Musical instruments"</span>, <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>plot_total <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>PV, <span class="fu">aes</span>(<span class="at">x=</span>mi_num, <span class="at">y=</span>Total_Score)) <span class="sc">+</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color=</span><span class="st">"#3459e6"</span>) <span class="sc">+</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm, <span class="at">size=</span><span class="fl">0.5</span>,<span class="at">color =</span> <span class="st">"#FF5733"</span>) <span class="sc">+</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Total Score by Musical instruments"</span>, <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>combined_plot <span class="ot">&lt;-</span> plot_math <span class="sc">+</span> plot_reading <span class="sc">+</span> plot_science <span class="sc">+</span> plot_total</span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>combined_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Clarity</strong></p>
+<ul>
+<li><p>This set of scatter plots shows in a concise way the relationship between students’ math, reading, science, and general performance and the amount of music equipment they own.</p></li>
+<li><p>By adding trend lines and using color zone scatter points, data trends in the chart are also highlighted, further improving clarity.</p></li>
+<li><p>The lack of a clear abscissa label for each image makes it impossible for the viewer to accurately understand what the abscissa represents.</p></li>
+<li><p>The data presented by four separate scatter plots is too scattered.</p></li>
+</ul>
+<p>In order to more clearly compare the relationship between the number of music devices and academic performance of students, I think these 3 scatter plots can be combined into one chart without the need for “Total” data. In this way, we can more effectively observe trends in math, reading, and science.</p>
+<p>To distinguish these 3 datasets, we use different colors to represent data points for each discipline and further highlight trends by fitting lines.</p>
+<p>This presentation aims to improve the clarity of the chart and make it easier for observers to understand the relationship between the number of student music devices and the performance.</p>
+<p><strong>Aesthetics</strong></p>
+<ul>
+<li><p>The selected color matching (blue scatter, orange trend line) is relatively coordinated, making the overall visual effect of the chart good.</p></li>
+<li><p>The font size of the chart is moderate, the title position is reasonable, and the overall layout is simple and orderly.</p></li>
+</ul>
+</section>
+<section id="sketch-of-proposed-design-2" class="level3">
+<h3 class="anchored" data-anchor-id="sketch-of-proposed-design-2">3.4.2 Sketch of Proposed Design</h3>
+</section>
+<section id="remake-2" class="level3">
+<h3 class="anchored" data-anchor-id="remake-2">3.4.3 Remake</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>combined_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PV, <span class="fu">aes</span>(<span class="at">x =</span> mi_num)) <span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> Math_Score, <span class="at">color =</span> <span class="st">"Math"</span>), <span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> Reading_Score, <span class="at">color =</span> <span class="st">"Reading"</span>), <span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> Science_Score, <span class="at">color =</span> <span class="st">"Science"</span>), <span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> Math_Score, <span class="at">color =</span> <span class="st">"Math"</span>), <span class="at">method =</span> lm, <span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> Reading_Score, <span class="at">color =</span> <span class="st">"Reading"</span>), <span class="at">method =</span> lm, <span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> Science_Score, <span class="at">color =</span> <span class="st">"Science"</span>), <span class="at">method =</span> lm, <span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Student Performance by Musical Instruments"</span>, <span class="at">x =</span> <span class="st">"Number of Musical Instruments"</span>, <span class="at">y =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Math"</span> <span class="ot">=</span> <span class="st">"#3459e6"</span>, <span class="st">"Reading"</span> <span class="ot">=</span> <span class="st">"#FF5733"</span>, <span class="st">"Science"</span> <span class="ot">=</span> <span class="st">"#4CAF50"</span>)) <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>), <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>combined_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Clarity</strong></p>
+<ul>
+<li><p>By adding a horizontal title, the picture becomes clearer to understand.</p></li>
+<li><p>The entire chart brings together scatter plots of three different subjects, making it easier to see the relationship between the amount of music equipment students have and their performance in math, reading, and science.</p></li>
+</ul>
+<p><strong>Aesthetics</strong></p>
+<ul>
+<li>The use of three bright and easily distinguishable colors makes the message of the picture clearer and the viewer can easily understand the associations in the chart.</li>
+</ul>
 </section>
 </section>
-<section id="section-1" class="level2">
-<h2 class="anchored" data-anchor-id="section-1">3.5</h2>
+<section id="student-performance-by-own-room" class="level2">
+<h2 class="anchored" data-anchor-id="student-performance-by-own-room">3.5 Student Performance by Own room</h2>
 <section id="critique-4" class="level3">
 <h3 class="anchored" data-anchor-id="critique-4">3.5.1 Critique</h3>
-<p>Clarity Aesthetics ### 3.5.2 Sketch of Proposed Design ### 3.5.3 Remake Clarity Aesthetics</p>
+<p>The author’s diagram is below.</p>
+<p><img src="images/clipboard-2126639366.png" class="img-fluid" width="523"></p>
+<p>The actual image generated after running the code.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PV, <span class="fu">aes</span>(<span class="at">x =</span>Math_Score , <span class="at">y =</span> Own_Room)) <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"#3459e6"</span>) <span class="sc">+</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Math Score by Private Space"</span>,<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PV, <span class="fu">aes</span>(<span class="at">x =</span>Reading_Score , <span class="at">y =</span> Own_Room)) <span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_boxplot</span>( <span class="at">fill =</span> <span class="st">"#3459e6"</span>) <span class="sc">+</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>     </span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Reading Score by Private Space"</span>, <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PV, <span class="fu">aes</span>(<span class="at">x =</span> Science_Score , <span class="at">y =</span> Own_Room)) <span class="sc">+</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_boxplot</span>( <span class="at">fill =</span> <span class="st">"#3459e6"</span>) <span class="sc">+</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>       </span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Science Score by Private Space"</span>, <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>              <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))  </span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PV, <span class="fu">aes</span>(<span class="at">x =</span> Total_Score , <span class="at">y =</span> Own_Room)) <span class="sc">+</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_boxplot</span>( <span class="at">fill =</span> <span class="st">"#3459e6"</span>) <span class="sc">+</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>       </span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Total Score by Private Space"</span>, <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>              <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>combined_plot<span class="ot">&lt;-</span> p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3 <span class="sc">+</span> p4</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>combined_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, after running the code, you observe that the author’s graph does not show any missing values. This may indicate that NA values that should have been present in the data set were processed or excluded in the chart, thus presenting a visual effect without missing values.</p>
+<p><strong>Clarity</strong></p>
+<ul>
+<li><p>Individual boxcharts effectively convey the distribution of scores for each subject (math, reading, science, and overall score) based on private Spaces, enabling viewers to understand the dispersion and median of scores.</p></li>
+<li><p>The title clearly states what each boxplot represents, enhancing the explainability of the chart.</p></li>
+<li><p>However, because the four charts are scattered, the overall trend is not easy to observe, and the correlation between private space and various disciplines is difficult to clearly contrast.</p></li>
+<li><p>The inclusion of “Total” data may add confusion to data comparisons because it is not directly related to a particular discipline.</p></li>
+</ul>
+<p><strong>Aesthetics</strong></p>
+<ul>
+<li><p>Using a consistent color scheme and a similar theme style across all boxlines helps maintain visual consistency.</p></li>
+<li><p>However, the four boxplots are separated, resulting in an overall lack of correlation between private Spaces and disciplines, and may require better layout or integration to enhance comparability.</p></li>
+</ul>
+</section>
+<section id="sketch-of-proposed-design-3" class="level3">
+<h3 class="anchored" data-anchor-id="sketch-of-proposed-design-3">3.5.2 Sketch of Proposed Design</h3>
+</section>
+<section id="remake-3" class="level3">
+<h3 class="anchored" data-anchor-id="remake-3">3.5.3 Remake</h3>
+<p>Remove the “Total” data and combine the box plots of the other three data into one chart.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PV, <span class="fu">aes</span>(<span class="at">x =</span> Math_Score , <span class="at">y =</span> Own_Room)) <span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"#3459e6"</span>) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Math Score by Private Space"</span>, <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PV, <span class="fu">aes</span>(<span class="at">x =</span> Reading_Score , <span class="at">y =</span> Own_Room)) <span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"#FF5733"</span>) <span class="sc">+</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Reading Score by Private Space"</span>, <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PV, <span class="fu">aes</span>(<span class="at">x =</span> Science_Score , <span class="at">y =</span> Own_Room)) <span class="sc">+</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"#4CAF50"</span>) <span class="sc">+</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Science Score by Private Space"</span>, <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>              <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))  </span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>combined_plot <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(p1, p2, p3, <span class="at">ncol =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>combined_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>TableGrob (3 x 1) "arrange": 3 grobs
+  z     cells    name           grob
+1 1 (1-1,1-1) arrange gtable[layout]
+2 2 (2-2,1-1) arrange gtable[layout]
+3 3 (3-3,1-1) arrange gtable[layout]</code></pre>
+</div>
+</div>
+<p><strong>Clarity</strong></p>
+<ul>
+<li><p>The integrated boxplot clearly shows the distribution of scores for math, reading, and science based on personal space.</p></li>
+<li><p>Since the charts are arranged vertically, viewers can more easily compare trends across disciplines, improving interpretability.</p></li>
+</ul>
+<p><strong>Aesthetics</strong></p>
+<ul>
+<li><p>The three boxlines use different fill colors to make them easily distinguishable throughout the drawing.</p></li>
+<li><p>The overall layout is clear, bright colors, and the text size is moderate, presenting an overall beautiful appearance.</p></li>
+</ul>
 </section>
 </section>
 </section>
 <section id="learning-points" class="level1">
 <h1>4. Learning Points</h1>
+<p>Take-home exercise 2 provided me with the opportunity to look at my classmates’ work from a different perspective, allowing me to reflect on my own take-home exercise 1. Through the evaluation of the students’ homework, I found many areas worth improving, and I used some drawing skills more skillfully.</p>
+<p>The visualized diagrams of the students opened new ideas for me and gave me more inspiration in the field of data visualization. I’ve learned that there is no fixed or single right way to design visualization, and that as long as the diagrams are clear, beautiful, and convey meaningful information, they can be considered successful data visualization.</p>
+<p>This experience has also taught me that reconsidering a problem, understanding its root causes, and combining personal ideas can develop an improved version of the work. Overall, this process has been very beneficial to me, giving me a deeper understanding and practice in data visualization.</p>
 
 
 </section>

@@ -71,6 +71,7 @@ PV <- stu_qqq_SG %>%
 There are five graphs in total in this take-home exercise 1 and they will be reviewed and remade in terms of clarity and aesthetics.
 
 ## 3.1 Distribution of Student Performance
+
 ### 3.1.1 Critique
 
 The histograms of math, reading, science and total scores show the distribution of student performance.
@@ -128,6 +129,7 @@ plot1 + plot2 + plot3 + plot4
 ### 3.1.2 Sketch of Proposed Design
 
 ### 3.1.3 Remake
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -204,8 +206,11 @@ The enhanced graph preserves the positive aspects of the original, including the
 -   Color matching is clearer, and dashed and histogram colors coordinate with each other, enhancing the overall aesthetic.
 
 ## 3.2 Student Performance by Gender
+
 ### 3.2.1 Critique
+
 The density plots compare academic performance distribution across genders.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -265,17 +270,16 @@ combined_plots
 
 -   However, compared with the density plot, the histogram more intuitively presents the relationship between gender and student performance. The interpretation of histograms is directly based on frequency or frequency, which makes comparison and interpretation relatively simple. The audience can understand it more easily.
 
-**Aesthetics**
--   The dark blue and orange red color matching is relatively bright, highlighting the characteristics of different genders and subjects, and the visual effect is good.
+**Aesthetics** - The dark blue and orange red color matching is relatively bright, highlighting the characteristics of different genders and subjects, and the visual effect is good.
 
 -   The transparency setting (alpha = 0.7) is used to make the density map overlay more layered and improve the aesthetic.
 
 -   By adding legends and headings to each chart, the chart is made more readable and aesthetic.
 
+### 3.2.2 Sketch of Proposed Design
 
-### 3.2.2 Sketch of Proposed Design 
+### 3.2.3 Remake
 
-### 3.2.3 Remake 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -330,22 +334,33 @@ combined_hist_plots <- hist_plot1 + hist_plot2 + hist_plot3 + hist_plot4 +
 
 combined_hist_plots
 ```
+
 The enhanced graph preserves the positive aspects of the original, including the caption and overall format, while making improvements in certain elements:
 
 **Clarity**
- 
- -   Adding dashed lines and text notes to the averages enhances the amount of information in the chart, making it easier for viewers to understand the central trend of the data.
 
--   The use of 20 bin and different colors provides clear histogram visuals for each gender, helping to observe the distribution. 
- 
+-   Adding dashed lines and text notes to the averages enhances the amount of information in the chart, making it easier for viewers to understand the central trend of the data.
+
+-   The use of 20 bin and different colors provides clear histogram visuals for each gender, helping to observe the distribution.
+
 **Aesthetics**
 
 -   Bright colors were chosen to make the histogram of the different genders clearly distinguishable in the chart. However, the red font of the mean is not obvious in this graph, but this is to correspond to the mean in Figure 3.1.3, because the color has not been changed.
 
 ## 3.3 Student Performance by School
+
 ### 3.3.1 Critique
 
-The box plots show the distribution of school average scores in each subject.
+The box plot shows the distribution of average school scores for each subject.
+
+Although it is appropriate to use a boxplot here, there is a data error when the author executes the code because the school ID ranges from 70200001 to 70200165.
+
+Obviously, there was a problem with the author's data, which caused the final graphical presentation to be biased. So, I'll re-run this code to show the correct chart.
+
+![](images/clipboard-2911149338.png)
+
+### 3.3.2 Not to remake( Just rerun code)
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -386,24 +401,238 @@ ggplot(School_Avg_Scores_long, aes(x = Subject, y = Score, fill = Subject)) +
         plot.title = element_text(hjust = 0.5))
 ```
 
-**Clarity** 
+**Clarity**
 
-**Aesthetics **
+-   Box plots clearly present the average distribution of each subject and provide an effective summary of the school's average scores.
 
+-   Clear axis labels and clear chart titles help viewers understand the content of the chart.
 
-### 3.3.2 Not to remake(Just suggustion)
+-   The outliers are clearly labeled using geom_text_repel() to make them easy to identify.
 
+**Aesthetics**
 
-## 3.4
+-   The use of bright blue padding enhances visual appeal and helps distinguish between subjects.
+
+-   The font size is appropriate, and the font size for the outliers is appropriate, although the color choice may require further consideration to ensure legibility.
+
+-   The overall layout is reasonable, and the boxplot is effectively organized on the X-axis and arranged in an orderly manner, making the chart easier to read.
+
+## 3.4 Student Performance by Musical Instruments
 
 ### 3.4.1 Critique
 
-Clarity Aesthetics \### 3.4.2 Sketch of Proposed Design \### 3.4.3 Remake Clarity Aesthetics
+This scatter plot shows the relationship between students' math, reading, science, and overall performance and the amount of music equipment they own, while fitting the linear regression line to show this relationship.
 
-## 3.5
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+plot_math <- ggplot(data=PV, aes(x=mi_num, y=Math_Score)) +
+  geom_point(color="#3459e6") +
+  geom_smooth(method=lm, size=0.5,color = "#FF5733") +
+  labs(title ="Math Score by Musical instruments", x = "", y = "")+
+    theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5))
+
+
+plot_reading <- ggplot(data=PV, aes(x=mi_num, y=Reading_Score)) +
+  geom_point(color="#3459e6") +
+  geom_smooth(method=lm, size=0.5,color = "#FF5733") +
+  labs(title ="Reading Score by Musical instruments", x = "", y = "")+
+    theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5))
+
+
+plot_science <- ggplot(data=PV, aes(x=mi_num, y=Science_Score)) +
+  geom_point(color="#3459e6") +
+  geom_smooth(method=lm, size=0.5,color = "#FF5733") +
+  labs(title ="Science Score by Musical instruments", x = "", y = "")+
+    theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5))
+
+
+plot_total <- ggplot(data=PV, aes(x=mi_num, y=Total_Score)) +
+  geom_point(color="#3459e6") +
+  geom_smooth(method=lm, size=0.5,color = "#FF5733") +
+  labs(title ="Total Score by Musical instruments", x = "", y = "")+
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5))
+
+
+combined_plot <- plot_math + plot_reading + plot_science + plot_total
+combined_plot
+```
+
+**Clarity**
+
+-   This set of scatter plots shows in a concise way the relationship between students' math, reading, science, and general performance and the amount of music equipment they own.
+
+-   By adding trend lines and using color zone scatter points, data trends in the chart are also highlighted, further improving clarity.
+
+-   The lack of a clear abscissa label for each image makes it impossible for the viewer to accurately understand what the abscissa represents.
+
+-   The data presented by four separate scatter plots is too scattered.
+
+In order to more clearly compare the relationship between the number of music devices and academic performance of students, I think these 3 scatter plots can be combined into one chart without the need for "Total" data. In this way, we can more effectively observe trends in math, reading, and science.
+
+To distinguish these 3 datasets, we use different colors to represent data points for each discipline and further highlight trends by fitting lines.
+
+This presentation aims to improve the clarity of the chart and make it easier for observers to understand the relationship between the number of student music devices and the performance.
+
+**Aesthetics**
+
+-   The selected color matching (blue scatter, orange trend line) is relatively coordinated, making the overall visual effect of the chart good.
+
+-   The font size of the chart is moderate, the title position is reasonable, and the overall layout is simple and orderly.
+
+### 3.4.2 Sketch of Proposed Design
+
+### 3.4.3 Remake
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+combined_plot <- ggplot(data = PV, aes(x = mi_num)) +
+  geom_point(aes(y = Math_Score, color = "Math"), size = 2, alpha = 0.7) +
+  geom_point(aes(y = Reading_Score, color = "Reading"), size = 2, alpha = 0.7) +
+  geom_point(aes(y = Science_Score, color = "Science"), size = 2, alpha = 0.7) +
+  geom_smooth(aes(y = Math_Score, color = "Math"), method = lm, size = 0.5, alpha = 0.5) +
+  geom_smooth(aes(y = Reading_Score, color = "Reading"), method = lm, size = 0.5, alpha = 0.5) +
+  geom_smooth(aes(y = Science_Score, color = "Science"), method = lm, size = 0.5, alpha = 0.5) +
+  labs(title = "Student Performance by Musical Instruments", x = "Number of Musical Instruments", y = "") +
+  scale_color_manual(values = c("Math" = "#3459e6", "Reading" = "#FF5733", "Science" = "#4CAF50")) +
+  theme_minimal() +
+  theme(text = element_text(size = 8), plot.title = element_text(hjust = 0.5))
+
+combined_plot
+```
+
+**Clarity**
+
+-   By adding a horizontal title, the picture becomes clearer to understand.
+
+-   The entire chart brings together scatter plots of three different subjects, making it easier to see the relationship between the amount of music equipment students have and their performance in math, reading, and science.
+
+**Aesthetics**
+
+-   The use of three bright and easily distinguishable colors makes the message of the picture clearer and the viewer can easily understand the associations in the chart.
+
+## 3.5 Student Performance by Own room
 
 ### 3.5.1 Critique
 
-Clarity Aesthetics \### 3.5.2 Sketch of Proposed Design \### 3.5.3 Remake Clarity Aesthetics
+The author's diagram is below.
+
+![](images/clipboard-2126639366.png){width="523"}
+
+The actual image generated after running the code.
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+p1 <- ggplot(data = PV, aes(x =Math_Score , y = Own_Room)) +
+        geom_boxplot(fill = "#3459e6") +
+        labs(title ="Math Score by Private Space",x = "", y = "")+
+        theme_minimal() +
+        theme(text = element_text(size = 8),
+              plot.title = element_text(hjust = 0.5))
+
+p2 <- ggplot(data = PV, aes(x =Reading_Score , y = Own_Room)) +
+        geom_boxplot( fill = "#3459e6") +
+     
+        labs(title ="Reading Score by Private Space", x = "", y = "")+
+        theme_minimal() +
+        theme(text = element_text(size = 8),
+              plot.title = element_text(hjust = 0.5))
+  
+p3 <- ggplot(data = PV, aes(x = Science_Score , y = Own_Room)) +
+        geom_boxplot( fill = "#3459e6") +
+       
+        labs(title ="Science Score by Private Space", x = "", y = "")+
+        theme_minimal() +
+        theme(text = element_text(size = 8),
+              plot.title = element_text(hjust = 0.5))  
+
+p4 <- ggplot(data = PV, aes(x = Total_Score , y = Own_Room)) +
+        geom_boxplot( fill = "#3459e6") +
+       
+        labs(title ="Total Score by Private Space", x = "", y = "")+
+        theme_minimal() +
+        theme(text = element_text(size = 8),
+              plot.title = element_text(hjust = 0.5))
+
+combined_plot<- p1 + p2 + p3 + p4
+combined_plot
+```
+However, after running the code, you observe that the author's graph does not show any missing values. This may indicate that NA values that should have been present in the data set were processed or excluded in the chart, thus presenting a visual effect without missing values.
+
+**Clarity**
+
+-   Individual boxcharts effectively convey the distribution of scores for each subject (math, reading, science, and overall score) based on private Spaces, enabling viewers to understand the dispersion and median of scores.
+
+-   The title clearly states what each boxplot represents, enhancing the explainability of the chart.
+
+-   However, because the four charts are scattered, the overall trend is not easy to observe, and the correlation between private space and various disciplines is difficult to clearly contrast.
+
+-   The inclusion of "Total" data may add confusion to data comparisons because it is not directly related to a particular discipline.
+
+**Aesthetics**
+
+-   Using a consistent color scheme and a similar theme style across all boxlines helps maintain visual consistency.
+
+-   However, the four boxplots are separated, resulting in an overall lack of correlation between private Spaces and disciplines, and may require better layout or integration to enhance comparability.
+
+### 3.5.2 Sketch of Proposed Design
+
+### 3.5.3 Remake
+Remove the "Total" data and combine the box plots of the other three data into one chart.
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+library(gridExtra)
+p1 <- ggplot(data = PV, aes(x = Math_Score , y = Own_Room)) +
+        geom_boxplot(fill = "#3459e6") +
+        labs(title ="Math Score by Private Space", x = "", y = "")+
+        theme_minimal() +
+        theme(text = element_text(size = 8),
+              plot.title = element_text(hjust = 0.5))
+
+p2 <- ggplot(data = PV, aes(x = Reading_Score , y = Own_Room)) +
+        geom_boxplot(fill = "#FF5733") +
+        labs(title ="Reading Score by Private Space", x = "", y = "")+
+        theme_minimal() +
+        theme(text = element_text(size = 8),
+              plot.title = element_text(hjust = 0.5))
+  
+p3 <- ggplot(data = PV, aes(x = Science_Score , y = Own_Room)) +
+        geom_boxplot(fill = "#4CAF50") +
+        labs(title ="Science Score by Private Space", x = "", y = "")+
+        theme_minimal() +
+        theme(text = element_text(size = 8),
+              plot.title = element_text(hjust = 0.5))  
+
+combined_plot <- grid.arrange(p1, p2, p3, ncol = 1)
+combined_plot
+```
+
+**Clarity**
+
+-   The integrated boxplot clearly shows the distribution of scores for math, reading, and science based on personal space.
+
+-   Since the charts are arranged vertically, viewers can more easily compare trends across disciplines, improving interpretability.
+
+**Aesthetics**
+
+-   The three boxlines use different fill colors to make them easily distinguishable throughout the drawing.
+
+-   The overall layout is clear, bright colors, and the text size is moderate, presenting an overall beautiful appearance.
 
 # 4. Learning Points
+
+Take-home exercise 2 provided me with the opportunity to look at my classmates' work from a different perspective, allowing me to reflect on my own take-home exercise 1. Through the evaluation of the students' homework, I found many areas worth improving, and I used some drawing skills more skillfully.
+
+The visualized diagrams of the students opened new ideas for me and gave me more inspiration in the field of data visualization. I've learned that there is no fixed or single right way to design visualization, and that as long as the diagrams are clear, beautiful, and convey meaningful information, they can be considered successful data visualization.
+
+This experience has also taught me that reconsidering a problem, understanding its root causes, and combining personal ideas can develop an improved version of the work. Overall, this process has been very beneficial to me, giving me a deeper understanding and practice in data visualization.
