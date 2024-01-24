@@ -128,6 +128,8 @@ plot1 + plot2 + plot3 + plot4
 
 ### 3.1.2 Sketch of Proposed Design
 
+![](images/clipboard-2701420346.png){width="557"}
+
 ### 3.1.3 Remake
 
 ```{r}
@@ -277,6 +279,8 @@ combined_plots
 -   By adding legends and headings to each chart, the chart is made more readable and aesthetic.
 
 ### 3.2.2 Sketch of Proposed Design
+
+![](images/clipboard-2858077126.png){width="565"}
 
 ### 3.2.3 Remake
 
@@ -490,6 +494,8 @@ This presentation aims to improve the clarity of the chart and make it easier fo
 
 ### 3.4.2 Sketch of Proposed Design
 
+![](images/clipboard-1287355095.png){width="557"}
+
 ### 3.4.3 Remake
 
 ```{r}
@@ -529,6 +535,7 @@ The author's diagram is below.
 ![](images/clipboard-2126639366.png){width="523"}
 
 The actual image generated after running the code.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -566,6 +573,7 @@ p4 <- ggplot(data = PV, aes(x = Total_Score , y = Own_Room)) +
 combined_plot<- p1 + p2 + p3 + p4
 combined_plot
 ```
+
 However, after running the code, you observe that the author's graph does not show any missing values. This may indicate that NA values that should have been present in the data set were processed or excluded in the chart, thus presenting a visual effect without missing values.
 
 **Clarity**
@@ -586,8 +594,12 @@ However, after running the code, you observe that the author's graph does not sh
 
 ### 3.5.2 Sketch of Proposed Design
 
+![](images/clipboard-3646995106.png){width="532"}
+
 ### 3.5.3 Remake
+
 Remove the "Total" data and combine the box plots of the other three data into one chart.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
