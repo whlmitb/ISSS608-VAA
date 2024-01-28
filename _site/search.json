@@ -53,7 +53,7 @@
     "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html",
     "title": "In-class Exercise 2",
     "section": "",
-    "text": "Lesson 2 Tableau operations Tableau link"
+    "text": "Lesson 2 - Tableau operations Tableau link"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html",
@@ -194,6 +194,27 @@
     "title": "In-class Exercise 1 :Now you see it!",
     "section": "Importing PISA data",
     "text": "Importing PISA data\nThe code chunk below uses read_sas() of haven to import PISA data into R environment.\n\n# eval: false\nstu_qqq &lt;- read_sas(\"data/cy08msp_stu_qqq.sas7bdat\")\n\n\n# eval: false\nstu_qqq_SG &lt;- stu_qqq %&gt;% \n  filter(CNT ==\"SGP\")\n\n\n# eval: false\nwrite_rds(stu_qqq_SG,\n          \"data/stu_qqq_SG.rds\")\n\n\nstu_qqq_SG &lt;- \nread_rds(\"data/stu_qqq_SG.rds\")"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html",
+    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html",
+    "title": "In-class Exercise 3",
+    "section": "",
+    "text": "Critic Figure 5. according to Clarity and Aesthetics"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#quiz",
+    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#quiz",
+    "title": "In-class Exercise 3",
+    "section": "",
+    "text": "Critic Figure 5. according to Clarity and Aesthetics"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#learning-some-tableau-operations",
+    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#learning-some-tableau-operations",
+    "title": "In-class Exercise 3",
+    "section": "Learning some Tableau operations",
+    "text": "Learning some Tableau operations\n\nTableau link\n\nSuperstore Sales and Profit Report\nSuperstore Sales and Profit Report Story\nMaths vs English Scatterplot with maeginal boxplot"
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html",

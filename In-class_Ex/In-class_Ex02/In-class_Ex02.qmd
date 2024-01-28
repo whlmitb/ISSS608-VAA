@@ -11,6 +11,6 @@ execute:
 editor: visual
 ---
 
-Lesson 2 Tableau operations
-[Tableau link](https://public.tableau.com/app/profile/honglu.wan/viz/In-class_Exercise02_17057348147550/Monthlysalesandprofitbyregion2016-2019?publish=yes)
+Lesson 2 - Tableau operations [Tableau link](https://public.tableau.com/app/profile/honglu.wan/viz/In-class_Exercise02_17057348147550/Monthlysalesandprofitbyregion2016-2019?publish=yes)
 
+![](images/ba8584942d88a702f8b56f9b78336ab.png)

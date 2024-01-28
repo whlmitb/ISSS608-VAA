@@ -1,3 +1,28 @@
 ---
 title: "In-class Exercise 3"
+author: "WAN HONGLU"
+date: "Januray 27, 2024"
+date-modified: "last-modified"
+
+execute: 
+  eval: true
+  echo: true
+  warning: false
+editor: visual
 ---
+
+## Quiz
+
+Critic [Figure 5.](https://www.datavisualizationsociety.org/survey?utm_source=newsletter-mailchimp&utm_medium=email&utm_campaign=SOTI_report_2023&utm_id=SOTI_report_2023&utm_source=DVS+members&utm_campaign=42b99e3ee9-EMAIL_CAMPAIGN_2024_01_25_07_58&utm_medium=email&utm_term=0_-42b99e3ee9-%5BLIST_EMAIL_ID%5D&mc_cid=42b99e3ee9&mc_eid=f5082edeae) according to **Clarity and Aesthetics**
+
+![](images/clipboard-2988050053.png){width="597"}
+
+## Learning some Tableau operations
+
+### Tableau link
+
+1.  [Superstore Sales and Profit Report](https://public.tableau.com/app/profile/honglu.wan/viz/In-class_Exercise03-SuperstoreSalesandProfitReport_17063372262300/Dashboard1?publish=yes)
+
+2.  [Superstore Sales and Profit Report Story](https://public.tableau.com/app/profile/honglu.wan/viz/In-class_Exercise03-SuperstoreSalesandProfitReportStory/SuperstoreSalesandProfitStory)
+
+3.  [Maths vs English Scatterplot with maeginal boxplot](https://public.tableau.com/app/profile/honglu.wan/viz/In-class_Exercise03_MathsvsEnglishScatterplotwithmaeginalboxplot/Dashboard1)
