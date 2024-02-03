@@ -12,20 +12,26 @@ editor: visual
 ---
 
 # Visualising Distribution
+
 ## Loading R packages
+
 ```{r}
 pacman::p_load(ggdist, ggridges, ggthemes,
                colorspace, tidyverse)
 ```
 
 ## Importing the data
+
 ```{r}
 exam <- read_csv("data/Exam_data.csv")
 ```
+
 ## Plotting Practice
+
 ### Visualising Distribution with Ridgeline Plot
 
 Plotting ridgeline graph: ggridges() method.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -48,6 +54,7 @@ ggplot(exam,
 ```
 
 Varying fill colors along the x axis.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -58,7 +65,7 @@ ggplot(exam,
   geom_density_ridges_gradient(
     scale = 3,
     rel_min_height = 0.01) +
-  scale_fill_viridis_c(name = "Temp. [F]",
+  scale_fill_viridis_c(name = "Student_Score",
                        option = "C") +
   scale_x_continuous(
     name = "English grades",
@@ -69,6 +76,7 @@ ggplot(exam,
 ```
 
 Mapping the probabilities directly onto colour.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -84,6 +92,7 @@ ggplot(exam,
 ```
 
 Ridgeline plots with quantile lines.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -123,7 +132,9 @@ ggplot(exam,
 ```
 
 ### Visualising Distribution with Raincloud Plot
+
 Plotting a Half Eye graph.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -137,6 +148,7 @@ ggplot(exam,
 ```
 
 Adding the boxplot with geom_boxplot().
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -152,6 +164,7 @@ ggplot(exam,
 ```
 
 Adding the Dot Plots with stat_dots().
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -191,18 +204,25 @@ ggplot(exam,
 ```
 
 # Visual Statistical Analysis
+
 ## Loading R packages_1
+
 ```{r}
 pacman::p_load(ggstatsplot, tidyverse)
 ```
 
 ## Importing the data_1
+
 ```{r}
 exam <- read_csv("data/Exam_data.csv")
 ```
+
 ## Plotting Practice_1
+
 ### Visual Statistical Analysis with ggstatsplot
+
 One-sample test: gghistostats() method.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -216,7 +236,9 @@ gghistostats(
   xlab = "English scores"
 )
 ```
+
 Two-sample mean test: ggbetweenstats().
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -228,7 +250,9 @@ ggbetweenstats(
   messages = FALSE
 )
 ```
+
 Oneway ANOVA Test: ggbetweenstats() method.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -244,7 +268,9 @@ ggbetweenstats(
   messages = FALSE
 )
 ```
+
 Significant Test of Correlation: ggscatterstats().
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -255,7 +281,9 @@ ggscatterstats(
   marginal = FALSE,
   )
 ```
+
 Significant Test of Association (Depedence) : ggbarstats() methods.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -268,20 +296,27 @@ ggbarstats(exam1,
            x = MATHS_bins, 
            y = GENDER)
 ```
+
 ## Loading R packages_2
+
 ```{r}
 pacman::p_load(readxl, performance, parameters, see)
 ```
 
 ## Importing the data_2
+
 ```{r}
 car_resale <- read_xls("data/ToyotaCorolla.xls", 
                        "data")
 car_resale
 ```
+
 ## Plotting Practice_2
+
 ### Visualise model diagnostic and model parameters by using parameters package
+
 Multiple Regression Model using lm().
+
 ```{r}
 model <- lm(Price ~ Age_08_04 + Mfg_Year + KM + 
               Weight + Guarantee_Period, data = car_resale)
@@ -289,15 +324,18 @@ model
 ```
 
 Model Diagnostic: checking for multicolinearity.
+
 ```{r}
 check_collinearity(model)
 ```
+
 ```{r}
 check_c <- check_collinearity(model)
 plot(check_c)
 ```
 
 Model Diagnostic: checking normality assumption.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -308,7 +346,9 @@ check_n <- check_normality(model1)
 
 plot(check_n)
 ```
+
 Model Diagnostic: Check model for homogeneity of variances.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -316,23 +356,30 @@ check_h <- check_heteroscedasticity(model1)
 
 plot(check_h)
 ```
+
 Model Diagnostic: Complete check.
+
 ```{r}
 check_model(model1)
 ```
+
 Visualising Regression Parameters: see methods.
+
 ```{r}
 plot(parameters(model1))
 ```
 
 Visualising Regression Parameters: ggcoefstats() methods.
+
 ```{r}
 ggcoefstats(model1, 
             output = "plot")
 ```
 
 # Visualising Uncertainty
+
 ## Loading R packages
+
 ```{r}
 devtools::install_github("wilkelab/ungeviz")
 ```
@@ -344,11 +391,15 @@ pacman::p_load(ungeviz, plotly, crosstalk,
 ```
 
 ## Importing the data
+
 ```{r}
 exam <- read_csv("data/Exam_data.csv")
 ```
+
 ## Plotting Practice
+
 ### Visualizing the uncertainty of point estimates: ggplot2 methods
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -365,6 +416,7 @@ knitr::kable(head(my_sum), format = 'html')
 ```
 
 Plotting standard error bars of point estimates.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -388,6 +440,7 @@ ggplot(my_sum) +
 ```
 
 Plotting confidence interval of point estimates.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -412,6 +465,7 @@ ggplot(my_sum) +
 ```
 
 Visualizing the uncertainty of point estimates with interactive error bars.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -462,7 +516,9 @@ bscols(widths = c(4,8),
 ```
 
 ### Visualising Uncertainty: ggdist package
+
 Visualizing the uncertainty of point estimates: ggdist methods.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -515,10 +571,13 @@ exam %>%
     title = "Visualising confidence intervals of mean math score",
     subtitle = "Gradient + interval plot")
 ```
+
 ### Visualising Uncertainty with Hypothetical Outcome Plots (HOPs)
+
 ```{r}
 devtools::install_github("wilkelab/ungeviz")
 ```
+
 ```{r}
 library(ungeviz)
 ```
@@ -535,20 +594,28 @@ ggplot(data = exam,
   theme_bw() + 
   transition_states(.draw, 1, 3)
 ```
+
 # Funnel Plots for Fair Comparisons
+
 ## Loading R packages
+
 ```{r}
 pacman::p_load(tidyverse, FunnelPlotR, plotly, knitr)
 ```
 
 ## Importing the data
+
 ```{r}
 covid19 <- read_csv("data/COVID-19_DKI_Jakarta.csv") %>%
   mutate_if(is.character, as.factor)
 ```
+
 ## Plotting Practice
+
 ### FunnelPlotR methods
+
 FunnelPlotR methods: The basic plot.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -560,6 +627,7 @@ funnel_plot(
 ```
 
 FunnelPlotR methods: Makeover 1.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -574,6 +642,7 @@ funnel_plot(
 ```
 
 FunnelPlotR methods: Makeover 2.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -592,7 +661,9 @@ funnel_plot(
 ```
 
 ### Funnel Plot for Fair Visual Comparison: ggplot2 methods
+
 Computing the basic derived fields.
+
 ```{r}
 df <- covid19 %>%
   mutate(rate = Death / Positive) %>%
@@ -603,6 +674,7 @@ fit.mean <- weighted.mean(df$rate, 1/df$rate.se^2)
 ```
 
 Calculate lower and upper limits for 95% and 99.9% CI.
+
 ```{r}
 number.seq <- seq(1, max(df$Positive), 1)
 number.ll95 <- fit.mean - 1.96 * sqrt((fit.mean*(1-fit.mean)) / (number.seq)) 
@@ -614,6 +686,7 @@ dfCI <- data.frame(number.ll95, number.ul95, number.ll999,
 ```
 
 Plotting a static funnel plot.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -661,7 +734,9 @@ p <- ggplot(df, aes(x = Positive, y = rate)) +
         legend.key.height = unit(0.3, "cm"))
 p
 ```
+
 Interactive Funnel Plot: plotly + ggplot2.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -671,5 +746,3 @@ fp_ggplotly <- ggplotly(p,
               "y"))
 fp_ggplotly
 ```
-
-

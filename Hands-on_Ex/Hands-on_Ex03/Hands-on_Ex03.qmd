@@ -12,18 +12,24 @@ editor: visual
 ---
 
 ## Loading R packages_1
+
 ```{r}
 pacman::p_load(ggiraph, plotly, 
                patchwork, DT, tidyverse) 
 ```
 
 ## Importing the data_1
+
 ```{r}
 exam_data <- read_csv("data/Exam_data.csv")
 ```
+
 ## Plotting Practice
+
 ### Controlling Information in Tooltips
+
 These three pictures look the same, but when you put the mouse over it, the information is different.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -66,6 +72,7 @@ girafe(
   height_svg = 8*0.618
 )
 ```
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -92,6 +99,7 @@ girafe(
 ```
 
 ### Displaying Statistics in tooltips
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -122,13 +130,14 @@ girafe(ggobj = gg_point,
 ```
 
 ### Hover effect with data_id aesthetic
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
 p <- ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_dotplot_interactive(           
-    aes(data_id = CLASS),             
+    aes(data_id = CLASS,tooltip = ID),             
     stackgroups = TRUE,               
     binwidth = 1,                        
     method = "histodot") +               
@@ -165,6 +174,7 @@ girafe(
 ```
 
 ### Combining tooltip and hover effect
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -190,6 +200,7 @@ girafe(
 ```
 
 ### Click effect with onclick
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -213,6 +224,7 @@ girafe(
 ```
 
 ### Coordinated Multiple Views with ggiraph
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -249,6 +261,7 @@ girafe(code = print(p1 + p2),
 ```
 
 ## Plotting Practice - plotly package
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -258,6 +271,7 @@ plot_ly(data = exam_data,
 ```
 
 ### Working with visual variable
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -268,6 +282,7 @@ plot_ly(data = exam_data,
 ```
 
 ### Creating an interactive scatter plot
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -281,6 +296,7 @@ ggplotly(p)
 ```
 
 ### Coordinated Multiple Views
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -303,12 +319,15 @@ subplot(ggplotly(p1),
 ```
 
 ## Plotting Practice - DT package
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
 DT::datatable(exam_data, class= "compact")
 ```
+
 ### Linked brushing: crosstalk method
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -329,12 +348,14 @@ crosstalk::bscols(gg,
 ```
 
 ## Loading R packages_2
+
 ```{r}
 pacman::p_load(readxl, gifski, gapminder,
                plotly, gganimate, tidyverse)
 ```
 
 ## Importing the data_2
+
 ```{r}
 col <- c("Country", "Continent")
 globalPop <- read_xls("data/GlobalPopulation.xls",
@@ -343,8 +364,10 @@ globalPop <- read_xls("data/GlobalPopulation.xls",
   mutate(Year = as.integer(Year))
 ```
 
-## Plotting Practice 
+## Plotting Practice
+
 ### Building a static population bubble plot
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -359,7 +382,9 @@ ggplot(globalPop, aes(x = Old, y = Young,
        x = '% Aged', 
        y = '% Young') 
 ```
+
 ### Building the animated bubble plot
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -376,7 +401,9 @@ ggplot(globalPop, aes(x = Old, y = Young,
   transition_time(Year) +       
   ease_aes('linear')          
 ```
+
 ### Building an animated bubble plot - ggplotly() method
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -418,6 +445,7 @@ ggplotly(gg)
 ```
 
 ### Building an animated bubble plot - plot_ly() method
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -436,7 +464,3 @@ bp <- globalPop %>%
   layout(showlegend = FALSE)
 bp
 ```
-
-
-
-

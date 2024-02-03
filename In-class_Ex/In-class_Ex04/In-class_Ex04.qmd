@@ -1,0 +1,14 @@
+---
+title: "In-class Exercise 4"
+author: "WAN HONGLU"
+date: "Feb 03, 2024"
+date-modified: "last-modified"
+
+execute: 
+  eval: true
+  echo: true
+  warning: false
+editor: visual
+---
+
+
