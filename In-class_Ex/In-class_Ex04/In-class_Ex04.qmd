@@ -11,4 +11,20 @@ execute:
 editor: visual
 ---
 
+In this lesson, the Prof goes through Hands-on Exercise 3 and 4 in detail, giving us a better understanding of the visualizations involved in these two exercise modules.
 
+### Two details we have changed.
+
+**Interactivity**
+
+Elements associated with a data_id will be highlighted upon mouse over. At the same time, the tooltip will show the ID. Therefore, we add extra conditions.
+
+![](images/d569b0168aa54bdc651ac4be5d7c115.png){width="469"}
+
+The plot is as follows.
+
+![](images/5ffa360d2fe53a613df3e351fad27ac.png){width="526"}
+
+**The legend information is incorrect**. From "Temperature" change to "Student_Score".
+
+![](images/d0d3426307890e47b8c891ebe60aebc.png){width="523"}
