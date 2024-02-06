@@ -10,6 +10,7 @@ execute:
   warning: false
 editor: visual
 ---
+
 # Creating Ternary Plot with R
 
 ## Loading R packages
@@ -39,7 +40,9 @@ agpop_mutated <- pop_data %>%
 ## Plotting Practice
 
 ### Plotting Ternary Diagram with R
-Plotting a static ternary diagram. 
+
+Plotting a static ternary diagram.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -56,7 +59,8 @@ ggtern(data=agpop_mutated, aes(x=YOUNG,y=ACTIVE, z=OLD)) +
   theme_rgbw()
 ```
 
-Plotting an interative ternary diagram. 
+Plotting an interative ternary diagram.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -113,9 +117,12 @@ pacman::p_load(corrplot, ggstatsplot, tidyverse,corrgram, ellipse, corrplot)
 ```{r}
  wine <- read_csv("data/wine_quality.csv")
 ```
+
 ## Plotting Practice
+
 ### Building Correlation Matrix: pairs() method
-Building a basic correlation matrix. 
+
+Building a basic correlation matrix.
 
 ```{r}
 pairs(wine[,1:11])
@@ -125,7 +132,8 @@ pairs(wine[,1:11])
 pairs(wine[,2:12])
 ```
 
-Drawing the lower corner. 
+Drawing the lower corner.
+
 ```{r}
 pairs(wine[,2:12], upper.panel = NULL)
 ```
@@ -135,6 +143,7 @@ pairs(wine[,2:12], lower.panel = NULL)
 ```
 
 Including with correlation coefficients.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -152,9 +161,10 @@ text(0.5, 0.5, txt, cex = cex.cor * (1 + r) / 2)
 pairs(wine[,2:12], 
       upper.panel = panel.cor)
 ```
+
 ### Visualising Correlation Matrix: ggcormat()
 ### Building multiple plots
-There may be a problem with the installation package version and the code will not execute.
+These code and plot exercises run into problems when trying to execute them simultaneously, but succeed when executed separately. But on render, the execution still fails.
 
 ### Visualising Correlation Matrix using corrplot Package
 
@@ -171,6 +181,7 @@ corrplot(wine.cor,
 ```
 
 Working with layout.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -190,6 +201,7 @@ corrplot(wine.cor,
 ```
 
 Working with mixed layout.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -202,6 +214,7 @@ corrplot.mixed(wine.cor,
 ```
 
 Combining corrgram with the significant test.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -217,6 +230,7 @@ corrplot(wine.cor,
 ```
 
 Reorder a corrgram.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -230,6 +244,7 @@ corrplot.mixed(wine.cor,
 ```
 
 Reordering a correlation matrix using hclustv.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -261,14 +276,12 @@ wh1 <- dplyr::select(wh, c(3, 7:12))
 wh_matrix <- data.matrix(wh)
 ```
 
-```{r}
-
-```
-
 ## Plotting Practice
 
 ### Static Heatmap
+
 heatmap() of R Stats.
+
 ```{r}
 wh_heatmap <- heatmap(wh_matrix,
                       Rowv=NA, Colv=NA)
@@ -277,7 +290,6 @@ wh_heatmap <- heatmap(wh_matrix,
 ```{r}
 wh_heatmap <- heatmap(wh_matrix)
 ```
-
 
 ```{r}
 #| code-fold: true
@@ -290,6 +302,7 @@ wh_heatmap <- heatmap(wh_matrix,
 ```
 
 ### Creating Interactive Heatmap
+
 Working with heatmaply.
 
 ```{r}
@@ -301,22 +314,26 @@ heatmaply(wh_matrix[, -c(1, 2, 4, 5)])
 ```
 
 Data trasformation - Scaling method.
+
 ```{r}
 heatmaply(wh_matrix[, -c(1, 2, 4, 5)],
           scale = "column")
 ```
 
 Data trasformation - Normalising method.
+
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]))
 ```
 
 Data trasformation - Percentising method
+
 ```{r}
 heatmaply(percentize(wh_matrix[, -c(1, 2, 4, 5)]))
 ```
 
 Manual approach.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -326,6 +343,7 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
 ```
 
 Statistical approach.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -347,6 +365,7 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
 ```
 
 Seriation.
+
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "OLO")
@@ -368,6 +387,7 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
 ```
 
 Working with colour palettes.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -377,6 +397,7 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
 ```
 
 The finishing touch.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -394,7 +415,6 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           )
 ```
 
-
 # Visual Multivariate Analysis with Parallel Coordinates Plot
 
 ## Loading R packages
@@ -410,14 +430,18 @@ wh <- read_csv("data/WHData-2018.csv")
 ```
 
 ## Plotting Practice
+
 ### Plotting Static Parallel Coordinates Plot
+
 Plotting a simple parallel coordinates.
+
 ```{r}
 ggparcoord(data = wh, 
            columns = c(7:12))
 ```
 
 Plotting a parallel coordinates with boxplot.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -431,6 +455,7 @@ ggparcoord(data = wh,
 ```
 
 Parallel coordinates with facet.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -445,6 +470,7 @@ ggparcoord(data = wh,
 ```
 
 Rotating x-axis text label.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -460,6 +486,7 @@ ggparcoord(data = wh,
 ```
 
 Adjusting the rotated x-axis text label.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -475,7 +502,9 @@ ggparcoord(data = wh,
 ```
 
 ### Plotting Interactive Parallel Coordinates Plot: parallelPlot methods
+
 The basic plot.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -487,6 +516,7 @@ parallelPlot(wh,
 ```
 
 Rotate axis label.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -495,6 +525,7 @@ parallelPlot(wh,
 ```
 
 Changing the colour scheme.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -504,6 +535,7 @@ parallelPlot(wh,
 ```
 
 Parallel coordinates plot with histogram.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -514,6 +546,7 @@ parallelPlot(wh,
 ```
 
 # Treemap Visualisation with R
+
 ## Loading R packages
 
 ```{r}
@@ -525,7 +558,9 @@ pacman::p_load(treemap, treemapify, tidyverse)
 ```{r}
 realis2018 <- read_csv("data/realis2018.csv")
 ```
+
 Grouped summaries without the Pipe.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -538,7 +573,9 @@ realis2018_summarised <- summarise(realis2018_grouped,
                           `Median Unit Price ($ psm)` = median(`Unit Price ($ psm)`, na.rm = TRUE), 
                           `Median Transacted Price` = median(`Transacted Price ($)`, na.rm = TRUE))
 ```
+
 Grouped summaries with the pipe.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -551,14 +588,20 @@ realis2018_summarised <- realis2018 %>%
             `Median Unit Price ($ psm)` = median(`Unit Price ($ psm)`, na.rm = TRUE),
             `Median Transacted Price` = median(`Transacted Price ($)`, na.rm = TRUE))
 ```
+
 ## Plotting Practice
+
 ### Designing Treemap with treemap Package
+
 Designing a static treemap.
+
 ```{r}
 realis2018_selected <- realis2018_summarised %>%
   filter(`Property Type` == "Condominium", `Type of Sale` == "Resale")
 ```
+
 Using the basic arguments.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -570,7 +613,9 @@ treemap(realis2018_selected,
         title.legend = "Median Unit Price (S$ per sq. m)"
         )
 ```
+
 Working with vColor and type arguments.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -585,6 +630,7 @@ treemap(realis2018_selected,
 ```
 
 The “value” type treemap.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -600,6 +646,7 @@ treemap(realis2018_selected,
 ```
 
 The “manual” type treemap.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -629,6 +676,7 @@ treemap(realis2018_selected,
 ```
 
 Working with algorithm argument.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -643,7 +691,9 @@ treemap(realis2018_selected,
         title.legend = "Median Unit Price (S$ per sq. m)"
         )
 ```
+
 Using sortID.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -661,7 +711,9 @@ treemap(realis2018_selected,
 ```
 
 ### Designing Treemap using treemapify Package
+
 Designing a basic treemap.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -674,8 +726,8 @@ ggplot(data=realis2018_selected,
   scale_fill_gradient(low = "light blue", high = "blue")
 ```
 
-Defining hierarchy.
-Group by Planning Region.
+Defining hierarchy. Group by Planning Region.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -688,6 +740,7 @@ ggplot(data=realis2018_selected,
 ```
 
 Group by Planning Area.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -700,6 +753,7 @@ ggplot(data=realis2018_selected,
 ```
 
 Adding boundary line.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -715,6 +769,7 @@ ggplot(data=realis2018_selected,
 ```
 
 ### Designing Interactive Treemap using d3treeR
+
 #### Loading R packages
 
 ```{r}
@@ -728,6 +783,7 @@ library(d3treeR)
 ```
 
 Designing An Interactive Treemap.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -744,4 +800,13 @@ tm <- treemap(realis2018_summarised,
 ```{r}
 d3tree(tm,rootname = "Singapore" )
 ```
+
+
+
+
+
+
+
+
+
 
