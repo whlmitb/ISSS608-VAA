@@ -163,8 +163,10 @@ pairs(wine[,2:12],
 ```
 
 ### Visualising Correlation Matrix: ggcormat()
+
 ### Building multiple plots
-These code and plot exercises run into problems when trying to execute them simultaneously, but succeed when executed separately. But on render, the execution still fails.
+
+These code and plot exercises run into problems when trying to execute them simultaneously, but succeed when executed separately. So I put this set of code in [Hands-on Exercise 5 Appendix]().
 
 ### Visualising Correlation Matrix using corrplot Package
 
@@ -800,13 +802,3 @@ tm <- treemap(realis2018_summarised,
 ```{r}
 d3tree(tm,rootname = "Singapore" )
 ```
-
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,218 @@
+---
+title: "Take-home Exercise 3 : Visualizing Meteorological Trends: A Data-Driven Analysis of Past and Future Changes"
+author: "WAN HONGLU"
+date: "Feb 11, 2024"
+date-modified: "last-modified"
+
+execute: 
+  eval: true
+  echo: true
+  warning: false
+editor: visual
+---
+
+# 1. Project Overview
+
+The aim of this project is to verify observed changes and predict future changes through visualization and interactive analysis of meteorological data.
+
+From [Meteorological Service Singapore](http://www.weather.gov.sg/home/), we will select a month in 1983, 1993, 2003, 2013 and 2023, extract daily temperature or rainfall records from them, and create insightful visualizations through data analysis. We will use advanced interactive technologies to enhance the user experience in data discovery and visual storytelling.
+
+This project not only helps deepen understanding of rising temperatures and increasing seasonal contrasts, but also provides users with a more intuitive and in-depth way to explore meteorological data.
+
+# 2. Data preparation
+
+## 2.1 Install and Load packages
+
+```{r}
+pacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, readxl, gifski, gapminder, gganimate,ggplot2,viridis,heatmaply) 
+```
+
+## 2.2 Import Data
+
+Download the [historical daily temperature or rainfall data](http://www.weather.gov.sg/climate-historical-daily/) from the [Meteorological Service Singapore](http://www.weather.gov.sg/home/) and import it.
+
+I pulled March climate data from five years - 1983, 1993, 2003, 2013 and 2023 - and combined these five tables together.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+library(dplyr)
+library(readr)
+
+table_1983 <- read_csv("data/DAILYDATA_S24_198303.csv", locale = locale(encoding = "ISO-8859-4"))
+table_1993 <- read_csv("data/DAILYDATA_S24_199303.csv", locale = locale(encoding = "ISO-8859-4"))
+table_2003 <- read_csv("data/DAILYDATA_S24_200303.csv", locale = locale(encoding = "ISO-8859-4"))
+table_2013 <- read_csv("data/DAILYDATA_S24_201303.csv", locale = locale(encoding = "ISO-8859-4"))
+table_2023 <- read_csv("data/DAILYDATA_S24_202303.csv", locale = locale(encoding = "UTF-8"))
+
+Climate_data <- bind_rows(
+  table_1983 %>% mutate(year = 1983),
+  table_1993 %>% mutate(year = 1993),
+  table_2003 %>% mutate(year = 2003),
+  table_2013 %>% mutate(year = 2013),
+  table_2023 %>% mutate(year = 2023)
+)
+
+head(Climate_data)
+```
+
+## 2.3 Data Cleaning
+
+The data of 5 years has been successfully merged, but some unnecessary columns have appeared in the process of merging. Collate and delete these useless columns, and clear the columns that have missing values in the original dataset.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+Climate_data <- subset(Climate_data, select = -c(`Highest 30 min Rainfall (mm)`, `Highest 60 min Rainfall (mm)`, `Highest 120 min Rainfall (mm)`, year,`Highest 30 Min Rainfall (mm)`, `Highest 60 Min Rainfall (mm)`, `Highest 120 Min Rainfall (mm)`))
+```
+
+Finally, a clean data set is generated.
+
+```{r}
+head(Climate_data)
+```
+
+# 3. Visualization and Insights
+
+## 3.1 Verifying climate change_1 - Daily temperature
+
+Observed changes: From 1948 to 2016,annual mean temperatures rose at an average rate of 0.25°C per decade.
+
+Future climate performance: Daily mean temperatures are projected to increase by 1.4°c to 4.6°C.
+
+### 3.1.1 Verification
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+library(ggplot2)
+library(plotly)
+
+my_colors <- c("#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854")
+
+p <- ggplot(data = Climate_data, aes(x = factor(Year), y = `Mean Temperature (°C)`)) +
+  geom_boxplot(fill = my_colors) +  
+  labs(title = "Mean Temperature Distribution Over the Years", x = "Year", y = "Mean Temperature (°C)") +
+  theme_minimal()
+
+p_plotly <- ggplotly(p, tooltip = c("Year", "Mean Temperature (°C)"))
+p_plotly
+```
+
+### 3.1.2 Insights
+
+From 1983 to 2023, there is an overall upward trend in temperature, confirming the observation that global temperatures are increasing. The temperature distribution varies from year to year, with 1993 likely affected by unusually high temperatures, while the distribution is relatively stable in 2003 and 2013. Despite the annual variation, the overall upward trend remains significant.
+
+The boxplot for some years shows relatively high or low temperature extremes, such as 1983 and 2023. Although the boxplot cannot directly depict future temperature changes, we infer from trend observations that there may be a higher temperature distribution in the future, supporting the projected temperature rise.
+
+## 3.2 Verifying climate change_2 - Frequency of warm days&nights
+
+Observed changes: Since 1972, the number of warm days and nights has increased, and the number of cool nights has decreased.
+
+Future climate performance: More warm days and warm nights for February to September throughout the 21st century.
+
+### 3.2.1 Verification
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+library(plotly)
+
+heatmap_data <- Climate_data[, c("Year", "Day", "Mean Temperature (°C)")]
+heatmap_data$text <- with(heatmap_data, paste("Day:", Day, "<br>Year:", Year, "<br>Temperature:", `Mean Temperature (°C)`))
+
+plot_ly(heatmap_data, x = ~Day, y = ~Year, z = ~`Mean Temperature (°C)`, text = ~text,
+        type = "heatmap", colorscale = "RdBu", hoverinfo = "text") %>%
+  layout(title = "Mean Temperature Heatmap",
+         xaxis = list(title = "Day"),
+         yaxis = list(title = "Year"))
+```
+
+### 3.2.2 Insights
+
+The statement indicates that since 1972, the number of warm days and nights has gradually increased, while the number of cool nights has decreased. However, this statement holds only in the case of 1983. In both 1993 and 2023, there was a gradual increase in the number of cool nights.
+
+For future prediction, the other statement shows that more warm days and warm nights from February to September throughout the 21st century. This statement is not quite accurate either. As you can see from the visual chart, by 2023, the number of cool nights also starts to gradually increase.
+
+## 3.3 Verifying climate change_3 - Rainfall
+
+Observed changes: From 1980 to 2016annual total rainfall rose at an average rate of 101mmper decade.
+
+Future climate performance: The contrast between the wet months (November to January) and dry months (February and June to September) is likely to be more pronounced. Intensity and frequency of heavy rainfall events is expected to increase as the world gets warmer.
+
+### 3.3.1 Verification
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+library(dplyr)
+library(plotly)
+
+Climate_data$`Daily Rainfall Total (mm)` <- as.numeric(as.character(Climate_data$`Daily Rainfall Total (mm)`))
+Climate_data$`Mean Temperature (°C)` <- as.numeric(as.character(Climate_data$`Mean Temperature (°C)`))
+
+p <- plot_ly(data = Climate_data, x = ~Day, y = ~`Daily Rainfall Total (mm)`, 
+              size = ~`Mean Temperature (°C)`, color = ~factor(Year),
+              type = 'scatter', mode = 'markers', text = ~paste("Year: ", Year, "<br>Day: ", Day, "<br>Rainfall: ", `Daily Rainfall Total (mm)`, "<br>Temperature: ", `Mean Temperature (°C)`))
+
+p <- layout(p, title = "Bubble Chart of Rainfall, Temperature, and Day", 
+            xaxis = list(title = "Day"), yaxis = list(title = "Daily Rainfall Total (mm)"),
+            showlegend = TRUE)
+p
+```
+
+### 3.3.2 Insights
+
+From this bubble graph, it is difficult to find the increasing trend of rainfall, indicating that these two statements are inaccurate.
+
+## 3.4 Verifying climate change_4 - Wind
+
+Observed changes: General wind patterns influenced by northeast and southwest monsoons. There are no clear trends for wind speed as it is dependent on the environment.
+
+Future climate performance: Singapore will continue to be influenced by the northeast and southwest monsoons with potential increase in wind speeds during northeast monsoon season.
+
+### 3.4.1 Verification
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+library(plotly)
+p <- plot_ly(data = Climate_data, 
+             x = ~Day, 
+             y = ~`Mean Wind Speed (km/h)`, 
+             color = ~as.factor(Year),
+             type = "scatter", 
+             mode = "lines",
+             hoverinfo = "text",
+             text = ~paste("Year: ", Year, "<br>Wind Speed: ", `Mean Wind Speed (km/h)`))
+
+p
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+library(plotly)
+p <- plot_ly(data = Climate_data, 
+             r = ~`Mean Wind Speed (km/h)`, 
+             theta = ~Day, 
+             type = "barpolar",
+             hoverinfo = "text",
+             text = ~paste("Year: ", Year, "<br>Wind Speed: ", `Mean Wind Speed (km/h)`),
+             marker = list(color = ~Year)) 
+p
+```
+
+### 3.4.2 Insights
+
+No obvious trend of wind speed could be found by observing the wind speed distribution diagram, thus verifying the description of Observed changes.
+
+The wind rose chart shows that the data is mainly concentrated between 0 and 45 degrees, which may suggest that the main source of wind is from the north to northeast direction. In addition, a trend of increasing wind speed from year to year was observed, which further supports the accuracy of future climate predictions. \## 3.5 Verifying climate change_5 - Sea level rise
+
+The lack of relevant data on Sea Level makes it impossible to directly verify statements about past Sea Level Rise or future projections.
+
+# 4. Learning Points
+
+Through further use of visual interactivity methods, my understanding of analytics became deeper and clearer.
+
+In the whole analysis process, I think the most important and challenging task is to clean and integrate the data. I firmly believe that data analysis can only be better if you handle clean data sets. Visual interactivity methods play a key role in this process, making the analysis of the data more explicit and clear.

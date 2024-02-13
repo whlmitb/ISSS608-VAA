@@ -1,0 +1,72 @@
+---
+title: "Hands-on Exercise 6 :Visualising and Analysing Time-oriented Data"
+author: "WAN HONGLU"
+date: "Feb 12, 2024"
+date-modified: "last-modified"
+
+execute: 
+  eval: true
+  echo: true
+  warning: false
+editor: visual
+---
+
+# Plotting Calendar Heatmap
+## Install and Load packages
+```{r}
+pacman::p_load(scales, viridis, lubridate, ggthemes, gridExtra, readxl, knitr, data.table, CGPfunctions, ggHoriPlot, tidyverse,extrafont,ggplot2)
+```
+
+## Importing the data
+```{r}
+attacks <- read_csv("data/eventlog.csv")
+```
+### Examining the data structure
+```{r}
+kable(head(attacks))
+```
+### Data Preparation
+**Step 1 : Deriving weekday and hour of day fields**
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+make_hr_wkday <- function(ts, sc, tz) {
+  real_times <- ymd_hms(ts, 
+                        tz = tz[1], 
+                        quiet = TRUE)
+  dt <- data.table(source_country = sc,
+                   wkday = weekdays(real_times),
+                   hour = hour(real_times))
+  return(dt)
+}
+```
+
+**Step 2: Deriving the attacks tibble data frame**
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+wkday_levels <- c('Saturday', 'Friday', 
+                  'Thursday', 'Wednesday', 
+                  'Tuesday', 'Monday', 
+                  'Sunday')
+
+attacks <- attacks %>%
+  group_by(tz) %>%
+  do(make_hr_wkday(.$timestamp, 
+                   .$source_country, 
+                   .$tz)) %>% 
+  ungroup() %>% 
+  mutate(wkday = factor(
+    wkday, levels = wkday_levels),
+    hour  = factor(
+      hour, levels = 0:23))
+```
+
+```{r}
+kable(head(attacks))
+```
+Wkday data has been unable to extract, showing NA, tried many different methods, but still can not be presented.
+
+## Building the Calendar Heatmaps
+
+
