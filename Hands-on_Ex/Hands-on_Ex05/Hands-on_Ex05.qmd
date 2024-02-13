@@ -166,7 +166,7 @@ pairs(wine[,2:12],
 
 ### Building multiple plots
 
-These code and plot exercises run into problems when trying to execute them simultaneously, but succeed when executed separately. So I put this set of code in [Hands-on Exercise 5 Appendix]().
+These code and plot exercises run into problems when trying to execute them simultaneously, but succeed when executed separately. So I put this set of code in [Hands-on Exercise 5 Appendix](https://whlmitbisss608.netlify.app/hands-on_ex/hands-on_ex05_appendix/hands-on_ex05_appendix).
 
 ### Visualising Correlation Matrix using corrplot Package
 
