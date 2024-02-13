@@ -207,7 +207,9 @@ p
 
 No obvious trend of wind speed could be found by observing the wind speed distribution diagram, thus verifying the description of Observed changes.
 
-The wind rose chart shows that the data is mainly concentrated between 0 and 45 degrees, which may suggest that the main source of wind is from the north to northeast direction. In addition, a trend of increasing wind speed from year to year was observed, which further supports the accuracy of future climate predictions. \## 3.5 Verifying climate change_5 - Sea level rise
+The wind rose chart shows that the data is mainly concentrated between 0 and 45 degrees, which may suggest that the main source of wind is from the north to northeast direction. In addition, a trend of increasing wind speed from year to year was observed, which further supports the accuracy of future climate predictions.
+
+## 3.5 Verifying climate change_5 - Sea level rise
 
 The lack of relevant data on Sea Level makes it impossible to directly verify statements about past Sea Level Rise or future projections.
 
