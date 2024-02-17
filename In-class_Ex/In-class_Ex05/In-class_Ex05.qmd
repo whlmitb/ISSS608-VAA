@@ -1,0 +1,22 @@
+---
+title: "In-class Exercise 5"
+author: "WAN HONGLU"
+date: "Feb 17, 2024"
+date-modified: "last-modified"
+
+execute: 
+  eval: true
+  echo: true
+  warning: false
+editor: visual
+---
+
+## Part 1: Reviewed Take-home Exercise 1
+
+## Part 2: Install package [Shiny](https://shiny.posit.co/)
+
+### [shinyapps.io link](https://whlmitb.shinyapps.io/Prototype1/)
+
+https://whlmitb.shinyapps.io/Prototype1/
+
+![](images/clipboard-2341954211.png)
