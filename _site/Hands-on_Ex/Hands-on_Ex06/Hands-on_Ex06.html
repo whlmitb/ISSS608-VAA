@@ -227,15 +227,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#plotting-calendar-heatmap" id="toc-plotting-calendar-heatmap" class="nav-link active" data-scroll-target="#plotting-calendar-heatmap">Plotting Calendar Heatmap</a>
+  <li><a href="#install-and-load-packages" id="toc-install-and-load-packages" class="nav-link active" data-scroll-target="#install-and-load-packages">Install and Load packages</a></li>
+  <li><a href="#ploting-practice---plotting-calendar-heatmap" id="toc-ploting-practice---plotting-calendar-heatmap" class="nav-link" data-scroll-target="#ploting-practice---plotting-calendar-heatmap">Ploting Practice - Plotting Calendar Heatmap</a>
   <ul class="collapse">
-  <li><a href="#install-and-load-packages" id="toc-install-and-load-packages" class="nav-link" data-scroll-target="#install-and-load-packages">Install and Load packages</a></li>
-  <li><a href="#importing-the-data" id="toc-importing-the-data" class="nav-link" data-scroll-target="#importing-the-data">Importing the data</a>
-  <ul class="collapse">
-  <li><a href="#examining-the-data-structure" id="toc-examining-the-data-structure" class="nav-link" data-scroll-target="#examining-the-data-structure">Examining the data structure</a></li>
+  <li><a href="#importing-the-data" id="toc-importing-the-data" class="nav-link" data-scroll-target="#importing-the-data">Importing the data</a></li>
   <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a></li>
-  </ul></li>
   <li><a href="#building-the-calendar-heatmaps" id="toc-building-the-calendar-heatmaps" class="nav-link" data-scroll-target="#building-the-calendar-heatmaps">Building the Calendar Heatmaps</a></li>
+  <li><a href="#building-multiple-calendar-heatmaps" id="toc-building-multiple-calendar-heatmaps" class="nav-link" data-scroll-target="#building-multiple-calendar-heatmaps">Building Multiple Calendar Heatmaps</a></li>
+  </ul></li>
+  <li><a href="#plotting-practice---plotting-cycle-plot" id="toc-plotting-practice---plotting-cycle-plot" class="nav-link" data-scroll-target="#plotting-practice---plotting-cycle-plot">Plotting Practice - Plotting Cycle Plot</a>
+  <ul class="collapse">
+  <li><a href="#step-1-data-import" id="toc-step-1-data-import" class="nav-link" data-scroll-target="#step-1-data-import">Step 1: Data Import</a></li>
+  <li><a href="#step-2-deriving-month-and-year-fields" id="toc-step-2-deriving-month-and-year-fields" class="nav-link" data-scroll-target="#step-2-deriving-month-and-year-fields">Step 2: Deriving month and year fields</a></li>
+  <li><a href="#step-3-extracting-the-target-country" id="toc-step-3-extracting-the-target-country" class="nav-link" data-scroll-target="#step-3-extracting-the-target-country">Step 3: Extracting the target country</a></li>
+  <li><a href="#step-4-computing-year-average-arrivals-by-month" id="toc-step-4-computing-year-average-arrivals-by-month" class="nav-link" data-scroll-target="#step-4-computing-year-average-arrivals-by-month">Step 4: Computing year average arrivals by month</a></li>
+  <li><a href="#step-5-plotting-the-cycle-plot" id="toc-step-5-plotting-the-cycle-plot" class="nav-link" data-scroll-target="#step-5-plotting-the-cycle-plot">Step 5: Plotting the cycle plot</a></li>
+  </ul></li>
+  <li><a href="#plotting-practice---plotting-slopegraph" id="toc-plotting-practice---plotting-slopegraph" class="nav-link" data-scroll-target="#plotting-practice---plotting-slopegraph">Plotting Practice - Plotting Slopegraph</a>
+  <ul class="collapse">
+  <li><a href="#step-1-data-import-1" id="toc-step-1-data-import-1" class="nav-link" data-scroll-target="#step-1-data-import-1">Step 1: Data Import</a></li>
+  <li><a href="#step-2-plotting-the-slopegraph" id="toc-step-2-plotting-the-slopegraph" class="nav-link" data-scroll-target="#step-2-plotting-the-slopegraph">Step 2: Plotting the slopegraph</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -269,7 +280,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">February 12, 2024</p>
+      <p class="date-modified">February 20, 2024</p>
     </div>
   </div>
     
@@ -280,23 +291,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="plotting-calendar-heatmap" class="level1">
-<h1>Plotting Calendar Heatmap</h1>
 <section id="install-and-load-packages" class="level2">
 <h2 class="anchored" data-anchor-id="install-and-load-packages">Install and Load packages</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(scales, viridis, lubridate, ggthemes, gridExtra, readxl, knitr, data.table, CGPfunctions, ggHoriPlot, tidyverse,extrafont,ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, readxl, data.table,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               ggthemes, scales, viridis, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               knitr, lubridate, gridExtra, CGPfunctions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="importing-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="importing-the-data">Importing the data</h2>
+<section id="ploting-practice---plotting-calendar-heatmap" class="level2">
+<h2 class="anchored" data-anchor-id="ploting-practice---plotting-calendar-heatmap">Ploting Practice - Plotting Calendar Heatmap</h2>
+<section id="importing-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="importing-the-data">Importing the data</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>attacks <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/eventlog.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="examining-the-data-structure" class="level3">
-<h3 class="anchored" data-anchor-id="examining-the-data-structure">Examining the data structure</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(attacks))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>attacks <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/eventlog.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(attacks))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <thead>
@@ -348,40 +358,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>make_hr_wkday <span class="ot">&lt;-</span> <span class="cf">function</span>(ts, sc, tz) {</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  real_times <span class="ot">&lt;-</span> <span class="fu">ymd_hms</span>(ts, </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">tz =</span> tz[<span class="dv">1</span>], </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">source_country =</span> sc,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">wkday =</span> <span class="fu">weekdays</span>(real_times),</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">hour =</span> <span class="fu">hour</span>(real_times))</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dt)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>make_hr_wkday <span class="ot">&lt;-</span> <span class="cf">function</span>(ts, sc, tz) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  real_times <span class="ot">&lt;-</span> <span class="fu">ymd_hms</span>(ts, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">tz =</span> tz[<span class="dv">1</span>], </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">source_country =</span> sc,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">wkday =</span> <span class="fu">weekdays</span>(real_times),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">hour =</span> <span class="fu">hour</span>(real_times))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dt)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p><strong>Step 2: Deriving the attacks tibble data frame</strong></p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>wkday_levels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'Saturday'</span>, <span class="st">'Friday'</span>, </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Thursday'</span>, <span class="st">'Wednesday'</span>, </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Tuesday'</span>, <span class="st">'Monday'</span>, </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Sunday'</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>attacks <span class="ot">&lt;-</span> attacks <span class="sc">%&gt;%</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tz) <span class="sc">%&gt;%</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do</span>(<span class="fu">make_hr_wkday</span>(.<span class="sc">$</span>timestamp, </span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                   .<span class="sc">$</span>source_country, </span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                   .<span class="sc">$</span>tz)) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wkday =</span> <span class="fu">factor</span>(</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    wkday, <span class="at">levels =</span> wkday_levels),</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">hour  =</span> <span class="fu">factor</span>(</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      hour, <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">23</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wkday_levels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'Saturday'</span>, <span class="st">'Friday'</span>, </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Thursday'</span>, <span class="st">'Wednesday'</span>, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Tuesday'</span>, <span class="st">'Monday'</span>, </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Sunday'</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>attacks <span class="ot">&lt;-</span> attacks <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tz) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do</span>(<span class="fu">make_hr_wkday</span>(.<span class="sc">$</span>timestamp, </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                   .<span class="sc">$</span>source_country, </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                   .<span class="sc">$</span>tz)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wkday =</span> <span class="fu">factor</span>(</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    wkday, <span class="at">levels =</span> wkday_levels),</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">hour  =</span> <span class="fu">factor</span>(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>      hour, <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">23</span>))</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(attacks))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(attacks))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <thead>
@@ -396,48 +405,241 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td style="text-align: left;">Africa/Cairo</td>
 <td style="text-align: left;">BG</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Saturday</td>
 <td style="text-align: left;">20</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Africa/Cairo</td>
 <td style="text-align: left;">TW</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Sunday</td>
 <td style="text-align: left;">6</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Africa/Cairo</td>
 <td style="text-align: left;">TW</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Sunday</td>
 <td style="text-align: left;">8</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Africa/Cairo</td>
 <td style="text-align: left;">CN</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Sunday</td>
 <td style="text-align: left;">11</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Africa/Cairo</td>
 <td style="text-align: left;">US</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Sunday</td>
 <td style="text-align: left;">15</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Africa/Cairo</td>
 <td style="text-align: left;">CA</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Monday</td>
 <td style="text-align: left;">11</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p>Wkday data has been unable to extract, showing NA, tried many different methods, but still can not be presented.</p>
+</section>
+<section id="building-the-calendar-heatmaps" class="level3">
+<h3 class="anchored" data-anchor-id="building-the-calendar-heatmaps">Building the Calendar Heatmaps</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>grouped <span class="ot">&lt;-</span> attacks <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(wkday, hour) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(grouped, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(hour, </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>           wkday, </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> n)) <span class="sc">+</span> </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"white"</span>, </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span> </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_tufte</span>(<span class="at">base_family =</span> <span class="st">"Helvetica"</span>) <span class="sc">+</span> </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">scale_fill_gradient</span>(<span class="at">name =</span> <span class="st">"# of attacks"</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">low =</span> <span class="st">"sky blue"</span>, </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>                    <span class="at">high =</span> <span class="st">"dark blue"</span>) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">y =</span> <span class="cn">NULL</span>, </span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">title =</span> <span class="st">"Attacks by weekday and time of day"</span>) <span class="sc">+</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex06_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="building-multiple-calendar-heatmaps" class="level3">
+<h3 class="anchored" data-anchor-id="building-multiple-calendar-heatmaps">Building Multiple Calendar Heatmaps</h3>
+<p><strong>Step 1:</strong> Deriving attack by country object.</p>
+<p><strong>Step 2:</strong> Preparing the tidy data frame.</p>
+<p><strong>Step 3:</strong> Plotting the Multiple Calender Heatmap by using ggplot2 package.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>attacks_by_country <span class="ot">&lt;-</span> <span class="fu">count</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  attacks, source_country) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> <span class="fu">percent</span>(n<span class="sc">/</span><span class="fu">sum</span>(n))) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>top4 <span class="ot">&lt;-</span> attacks_by_country<span class="sc">$</span>source_country[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>top4_attacks <span class="ot">&lt;-</span> attacks <span class="sc">%&gt;%</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(source_country <span class="sc">%in%</span> top4) <span class="sc">%&gt;%</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(source_country, wkday, hour) <span class="sc">%&gt;%</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source_country =</span> <span class="fu">factor</span>(</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    source_country, <span class="at">levels =</span> top4)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top4_attacks, </span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(hour, </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>           wkday, </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> n)) <span class="sc">+</span> </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"white"</span>, </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span> </span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_tufte</span>(<span class="at">base_family =</span> <span class="st">"Helvetica"</span>) <span class="sc">+</span> </span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">name =</span> <span class="st">"# of attacks"</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>                    <span class="at">low =</span> <span class="st">"sky blue"</span>, </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>                    <span class="at">high =</span> <span class="st">"dark blue"</span>) <span class="sc">+</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>source_country, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, </span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>     <span class="at">title =</span> <span class="st">"Attacks on top 4 countries by weekday and time of day"</span>) <span class="sc">+</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex06_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
-<section id="building-the-calendar-heatmaps" class="level2">
-<h2 class="anchored" data-anchor-id="building-the-calendar-heatmaps">Building the Calendar Heatmaps</h2>
+<section id="plotting-practice---plotting-cycle-plot" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-practice---plotting-cycle-plot">Plotting Practice - Plotting Cycle Plot</h2>
+<section id="step-1-data-import" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-data-import">Step 1: Data Import</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>air <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/arrivals_by_air.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-2-deriving-month-and-year-fields" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-deriving-month-and-year-fields">Step 2: Deriving month and year fields</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>air<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">month</span>(air<span class="sc">$</span><span class="st">`</span><span class="at">Month-Year</span><span class="st">`</span>), </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">levels=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels=</span>month.abb, </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ordered=</span><span class="cn">TRUE</span>) </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>air<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">year</span>(<span class="fu">ymd</span>(air<span class="sc">$</span><span class="st">`</span><span class="at">Month-Year</span><span class="st">`</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="step-3-extracting-the-target-country" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-extracting-the-target-country">Step 3: Extracting the target country</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Vietnam <span class="ot">&lt;-</span> air <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">Vietnam</span><span class="st">`</span>, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>         month, </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>         year) <span class="sc">%&gt;%</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2010</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="step-4-computing-year-average-arrivals-by-month" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-computing-year-average-arrivals-by-month">Step 4: Computing year average arrivals by month</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>hline.data <span class="ot">&lt;-</span> Vietnam <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avgvalue =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Vietnam</span><span class="st">`</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="step-5-plotting-the-cycle-plot" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-plotting-the-cycle-plot">Step 5: Plotting the cycle plot</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>Vietnam,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x=</span>year, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">y=</span><span class="st">`</span><span class="at">Vietnam</span><span class="st">`</span>, </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">group=</span>month), </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">colour=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span>avgvalue), </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">data=</span>hline.data, </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype=</span><span class="dv">6</span>, </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">colour=</span><span class="st">"red"</span>, </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>month) <span class="sc">+</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Visitor arrivals from Vietnam by air, Jan 2010-Dec 2019"</span>) <span class="sc">+</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"No. of Visitors"</span>) <span class="sc">+</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_tufte</span>(<span class="at">base_family =</span> <span class="st">"Helvetica"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex06_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="plotting-practice---plotting-slopegraph" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-practice---plotting-slopegraph">Plotting Practice - Plotting Slopegraph</h2>
+<section id="step-1-data-import-1" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-data-import-1">Step 1: Data Import</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>rice <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/rice.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-2-plotting-the-slopegraph" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-plotting-the-slopegraph">Step 2: Plotting the slopegraph</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rice <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">factor</span>(Year)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1961</span>, <span class="dv">1980</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">newggslopegraph</span>(Year, Yield, Country,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">Title =</span> <span class="st">"Rice Yield of Top 11 Asian Counties"</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">SubTitle =</span> <span class="st">"1961-1980"</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">Caption =</span> <span class="st">"Prepared by: Dr. Kam Tin Seong"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex06_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
 </section>
