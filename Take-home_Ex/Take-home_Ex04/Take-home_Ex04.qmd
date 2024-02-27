@@ -1,0 +1,412 @@
+---
+title: "Take-home Exercise 4: Prototyping Modules for Visual Analytics Shiny Application"
+author: "WAN HONGLU"
+date: "Feb 26, 2024"
+date-modified: "last-modified"
+
+execute:
+  eval: true
+  echo: true
+  warning: false
+editor: visual
+---
+
+# 1. Project Overview
+
+Our group project aims to solve the problem of the Singapore rental market by creating a visual application based on R Shiny. The core objective of the project is to accurately predict the future trend of housing rental prices in various regions in order to provide tenants with informed rental decision support.
+
+In Take-home Exercise 4, our task was to prototype the visual application that our team had designed and select the appropriate Shiny UI components. This step is designed to ensure that our team project can be completed successfully, showcasing the functionality and features of the design through suitable Shiny UI components that make it easy and intuitive for users to interact with the application.
+
+Through this process, we verify that the selected R package is supported, test the correctness of the R code, and determine the parameters and output exposed in the Shiny application. Our goal is to create a full-featured, user-friendly visualization tool to help users gain insight into rental trends in different parts of Singapore, thereby enhancing tenants' decision-making skills.
+
+# 2. Data Preparation
+
+Our group obtained data on rental rates in Singapore from the [Urban Redevelopment Authority](https://www.ura.gov.sg/property-market-information/pmiResidentialRentalSearch). In order to obtain the required information, we conducted a search on the website and selected the data that met our needs. We then consolidate and merge this data and save it into a CSV file.
+
+## 2.1 Install and Load packages
+
+```{r}
+pacman::p_load(ggplot2, dplyr, tidyr, plotly, corrplot,readr,ggstatsplot,png)
+```
+
+## 2.2 Import Data
+
+```{r}
+Rental_data <- read_csv("data/ResidentialRental_Final.csv")
+```
+
+```{r}
+head(Rental_data)
+```
+
+# 3. Analysis
+
+## 3.1 Exploratory Data Analysis (EDA)
+
+**Analysis of rental influencing factors:** Exploratory data analysis is performed by exploring the relationship between Monthly_Rent_SGD and Floor_Area_SQFT_Avg.And I set Property_Type and Planning_Region as faceted variables.
+
+### 3.1.1 Correlation between Floor_Area_SQM_Avg and Monthly_Rent_SGD
+
+```{r}
+ggscatterstats(data = Rental_data,
+               x = Floor_Area_SQM_Avg, y = Monthly_Rent_SGD,
+               type = "nonparametric") +
+  facet_wrap(vars(!!sym("Property_Type"))) +
+  labs(x = "Floor_Area_SQM_Avg", y = "Monthly_Rent_SGD") +
+  theme_minimal()
+```
+
+```{r}
+ggscatterstats(data = Rental_data,
+               x = Floor_Area_SQM_Avg, y = Monthly_Rent_SGD,
+               type = "nonparametric") +
+  facet_wrap(vars(!!sym("Planning_Region"))) +
+  labs(x = "Floor_Area_SQM_Avg", y = "Monthly_Rent_SGD") +
+  theme_minimal()
+```
+
+**Insights:** Looking at the correlation between Floor_Area_SQM_Avg and Monthly_Rent_SGD, we found that regardless of the area or type of home, the general trend was that the larger the average size of the home, the higher the monthly rent.
+
+### 3.1.2 Explore the relationship between No_of_Bedroom and Floor_Area_SQM_Avg
+
+```{r}
+boxplot <- plot_ly(data = Rental_data, 
+                   x = ~No_of_Bedroom, 
+                   y = ~Floor_Area_SQM_Avg, 
+                   type = "box", 
+                   boxpoints = FALSE,  # Outliers are not displayed
+                   jitter = 0.3,
+                   line = list(color = "black"))  
+
+median_values <- Rental_data %>%
+  group_by(No_of_Bedroom) %>%
+  summarise(median_value = median(Floor_Area_SQM_Avg, na.rm = TRUE))
+
+boxplot <- boxplot %>% 
+  add_lines(x = median_values$No_of_Bedroom, 
+            y = median_values$median_value, 
+            mode = "lines",
+            line = list(color = "red"),
+            name = "Median Line")
+
+layout <- list(
+  xaxis = list(title = "No_of_Bedroom"),
+  yaxis = list(title = "Floor_Area_SQM_Avg")
+)
+
+interactive_boxplot <- boxplot %>% layout(layout)
+
+interactive_boxplot
+```
+
+**Insights:** From the trend of this box plot, we can see that usually the more rooms, the larger the area of the house.
+
+## 3.2 Confirmatory Data Analysis (CDA)
+
+### 3.2.1 Verification 1 - Housing type significantly affects monthly rent.
+
+H0: There is no significant difference in monthly rent by housing type.
+
+H1: Monthly rent varies significantly depending on the type of house.
+
+```{r}
+# In the linear model,Monthly_Rent_SGD is the response variable and Property_Type is the predictor variable
+lm_model <- lm(Monthly_Rent_SGD ~ Property_Type, data = Rental_data)
+
+# Perform ANOVA tests
+anova_result <- anova(lm_model)
+
+print(anova_result)
+
+if (anova_result$`Pr(>F)`[1] < 0.05) {
+  cat("Rejecting the null hypothesis, there is a significant difference.\n")
+} else {
+  cat("Failing to reject the null hypothesis, monthly rents do not differ significantly between different housing types.\n")
+}
+```
+
+**Insights:** The conclusion "reject the null hypothesis, there is a significant difference" means that there is sufficient evidence that different housing types have a significant effect on monthly rents.
+
+**A visualization plot showing the distribution of monthly rent across different housing types**
+
+```{r}
+plot_ly(data = Rental_data, 
+        x = ~Property_Type, 
+        y = ~Monthly_Rent_SGD, 
+        type = "violin", 
+        box = list(visible = TRUE),
+        points = "none",  
+        color = ~Property_Type) %>%
+  layout(xaxis = list(title = "Property Type"),
+         yaxis = list(title = "Monthly Rent SGD"))
+```
+
+### 3.2.2 Verification 2 - Planning area has a significant impact on monthly rent
+
+H0: There is no significant difference in monthly rents by planning area.
+
+H1: Monthly rent varies significantly depending on the planned area.
+
+```{r}
+# In the linear model, Monthly_Rent_SGD is the response variable and Planning_Region is the predictor variable
+lm_model_region <- lm(Monthly_Rent_SGD ~ Planning_Region, data = Rental_data)
+
+anova_result_region <- anova(lm_model_region)
+
+print(anova_result_region)
+
+if (anova_result_region$`Pr(>F)`[1] < 0.05) {
+  cat("Rejecting the null hypothesis, there is a significant difference in monthly rents between different planning regions.\n")
+} else {
+  cat("Failing to reject the null hypothesis, monthly rents do not differ significantly between different planning regions.\n")
+}
+```
+
+**Insights:** We reject the null hypothesis that monthly rents vary significantly across planning areas.
+
+**A visualization plot showing the distribution of monthly rent across different planning region**
+
+```{r}
+grouped_bar_chart <- ggplot(Rental_data, aes(x = Planning_Region, y = Monthly_Rent_SGD, fill = Planning_Region)) +
+  geom_bar(stat = "summary", fun = "mean") +
+  labs(x = "Planning Region", y = "Mean Monthly Rent SGD") +
+  theme_minimal()
+
+interactive_grouped_bar_chart <- ggplotly(grouped_bar_chart)
+
+interactive_grouped_bar_chart
+```
+
+### 3.2.3 Verification 3 - The number of bedrooms has a significant effect on the size of the house
+
+H0: The number of bedrooms has no significant effect on the size of the house.
+
+H1: The number of bedrooms has a significant effect on the size of the house.
+
+```{r}
+# In the linear model, Floor_Area_SQM_Avg is the response variable and No_of_Bedroom is the predictor variable
+lm_model <- lm(Floor_Area_SQM_Avg ~ No_of_Bedroom, data = Rental_data)
+
+anova_result <- anova(lm_model)
+
+print(anova_result)
+
+if (anova_result$`Pr(>F)`[1] < 0.05) {
+  cat("Rejecting the null hypothesis, there is a significant difference.\n")
+} else {
+  cat("Failing to reject the null hypothesis, bedroom count does not significantly affect floor area.\n")
+}
+```
+
+**Insights:** We reject the null hypothesis, which means that the number of bedrooms has a significant effect on the size of the house, or that there is a significant linear relationship between the number of bedrooms and the size of the house.
+
+**A visualization plot showing the distribution of the number of bedrooms and house area**
+
+```{r}
+filtered_data <- Rental_data %>% na.omit(c("No_of_Bedroom", "Floor_Area_SQM_Avg", "Property_Type"))
+
+lm_model <- lm(Floor_Area_SQM_Avg ~ No_of_Bedroom, data = filtered_data)
+
+predictions <- predict(lm_model, filtered_data)
+
+plot_ly(data = filtered_data, 
+        x = ~No_of_Bedroom, 
+        y = ~Floor_Area_SQM_Avg, 
+        type = "scatter",
+        mode = "markers",
+        marker = list(color = ~Property_Type),
+        text = ~paste("Property Type: ", Property_Type, "<br>No of Bedroom: ", No_of_Bedroom, "<br>Floor Area SQM Avg: ", Floor_Area_SQM_Avg)) %>%
+  add_lines(x = ~No_of_Bedroom, 
+            y = ~predictions, 
+            type = "scatter", 
+            mode = "lines", 
+            line = list(color = "red")) %>%
+  layout(xaxis = list(title = "No of Bedroom"),
+         yaxis = list(title = "Floor Area SQM Avg"))
+```
+
+# 4. UI Design
+
+I learned that the [UI Design Storyboard](https://giniceseah.netlify.app/posts/2021-07-31-storyboard/#section-one-summary) should include three parts: **Summary, Data exploration analysis and Forecasting.**
+
+```{r}
+library(shiny)
+library(shinydashboard)
+library(DT)
+library(shinyjs)
+library(plotly)
+library(ggplot2)
+
+Rental_data <- read.csv("data/ResidentialRental_Final.csv")
+
+# Define UI
+ui <- dashboardPage(
+  dashboardHeader(title = "Rental Data Analysis"),
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Summary", tabName = "summary"),
+      menuItem("Data exploration analysis", tabName = "data_exploration"),
+      menuItem("Forecasting", tabName = "forecasting")
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      # Summary tab
+      tabItem(tabName = "summary",
+              fluidRow(
+                box(title = "Summary", status = "info", solidHeader = TRUE,
+                    textOutput("summary_text"))
+              ),
+              fluidRow(
+                box(title = "Top 10 Rows of the Dataset", status = "primary", solidHeader = TRUE,
+                    DTOutput("top_rows_table"))
+              )
+      ),
+      
+      # Data exploration analysis tab
+      tabItem(tabName = "data_exploration",
+              fluidRow(
+                box(title = "EDA: Correlation Plot", status = "primary", solidHeader = TRUE,
+                    plotOutput("correlation_plot"))
+              ),
+              fluidRow(
+                box(title = "EDA: Box Plot", status = "warning", solidHeader = TRUE,
+                    plotlyOutput("box_plot"))
+              ),
+              fluidRow(
+                box(title = "CDA: ANOVA Results", status = "success", solidHeader = TRUE,
+                    verbatimTextOutput("anova_results"))
+              ),
+              fluidRow(
+                box(title = "CDA: Violin Plot", status = "danger", solidHeader = TRUE,
+                    plotlyOutput("violin_plot"))
+              ),
+              fluidRow(
+                box(title = "CDA: Grouped Bar Chart", status = "info", solidHeader = TRUE,
+                    plotlyOutput("grouped_bar_chart"))
+              )
+      ),
+      
+      # Forecasting tab
+      tabItem(tabName = "forecasting",
+              fluidRow(
+                box(title = "Forecasting Analysis", status = "info", solidHeader = TRUE,
+                    textOutput("forecasting_text"))
+              )
+      )
+    )
+  )
+)
+
+# Define server
+server <- function(input, output) {
+  output$summary_text <- renderText({
+    "Housing rent-related data description."
+  })
+
+  # Render top 10 rows of the dataset
+  output$top_rows_table <- renderDT({
+    datatable(head(Rental_data, 10))
+  })
+
+  # Render correlation plot
+  output$correlation_plot <- renderPlot({
+    ggplot(Rental_data, aes(x = Floor_Area_SQM_Avg, y = Monthly_Rent_SGD)) +
+      geom_point() +
+      labs(x = "Floor_Area_SQM_Avg", y = "Monthly_Rent_SGD") +
+      theme_minimal()
+  })
+
+  # Render box plot
+  output$box_plot <- renderPlotly({
+    boxplot <- plot_ly(data = Rental_data,
+                       x = ~No_of_Bedroom,
+                       y = ~Floor_Area_SQM_Avg,
+                       type = "box",
+                       boxpoints = FALSE,
+                       jitter = 0.3,
+                       line = list(color = "black"))
+
+    median_values <- Rental_data %>%
+      group_by(No_of_Bedroom) %>%
+      summarise(median_value = median(Floor_Area_SQM_Avg, na.rm = TRUE))
+
+    boxplot <- boxplot %>%
+      add_lines(x = median_values$No_of_Bedroom,
+                y = median_values$median_value,
+                mode = "lines",
+                line = list(color = "red"),
+                name = "Median Line")
+
+    boxplot
+  })
+
+  # Render ANOVA results
+  output$anova_results <- renderPrint({
+    lm_model <- lm(Monthly_Rent_SGD ~ Property_Type + Planning_Region, data = Rental_data)
+    anova_result <- anova(lm_model)
+    print(anova_result)
+    
+    if (anova_result$`Pr(>F)`[1] < 0.05) {
+      cat("Rejecting the null hypothesis, there is a significant difference.\n")
+    } else {
+      cat("Failing to reject the null hypothesis, monthly rents do not differ significantly between different housing types.\n")
+    }
+  })
+
+  # Render violin plot
+  output$violin_plot <- renderPlotly({
+    plot_ly(data = Rental_data,
+            x = ~Property_Type,
+            y = ~Monthly_Rent_SGD,
+            type = "violin",
+            box = list(visible = TRUE),
+            points = "none",
+            color = ~Property_Type) %>%
+      layout(xaxis = list(title = "Property Type"),
+             yaxis = list(title = "Monthly Rent SGD"))
+  })
+
+  # Render grouped bar chart
+  output$grouped_bar_chart <- renderPlotly({
+    grouped_bar_chart <- ggplot(Rental_data, aes(x = Planning_Region, y = Monthly_Rent_SGD, fill = Planning_Region)) +
+      geom_bar(stat = "summary", fun = "mean") +
+      labs(x = "Planning Region", y = "Mean Monthly Rent SGD") +
+      theme_minimal()
+
+    ggplotly(grouped_bar_chart)
+  })
+
+  # Render forecasting text
+  output$forecasting_text <- renderText({
+    "Based on the current analysis, we believe that, irrespective of the region, larger houses tend to have higher rents. In other words, the more rooms a house has, the higher its monthly rental price."
+  })
+}
+
+# Run the application
+shinyApp(ui, server)
+```
+
+**Static R Markdown documents do not support shiny applications, so I took a screenshot of the UI design part I did to show it.**
+
+**Summary**
+
+![](images/4951d2f6a4e5544e9d3c77cd869bbdb.png)
+
+**Data exploration analysis**
+
+![](images/90b8f3e1e126d30fd60f35af4c510ac.png)
+
+![](images/9c8ff8716714193149e8984c1a0016d.png)
+
+![](images/1904e850b38aa7de1eb0f4400dd5a80.png)
+
+![](images/9c11e476c5ca67ade372ded3e489105.png)
+
+**Forecasting**
+
+![](images/fafb3fefff86cb44af5fc722ff03ead.png)
+
+# 5. Learning Point
+
+In the process of learning UI design, I found that it is a new knowledge field, and there are still many places for me to deeply understand and study hard. UI design is critical in designing visual analytics applications, so I thought that mastering this skill would positively impact my data science and analytics work.
