@@ -11,7 +11,7 @@
     "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#install-and-load-packages",
     "title": "Take-home Exercise 4: Prototyping Modules for Visual Analytics Shiny Application",
     "section": "2.1 Install and Load packages",
-    "text": "2.1 Install and Load packages\n\npacman::p_load(ggplot2, dplyr, tidyr, plotly, corrplot,readr,ggstatsplot,png)"
+    "text": "2.1 Install and Load packages\n\npacman::p_load(ggplot2, dplyr, tidyr, plotly,corrplot,readr,ggstatsplot,png)"
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#import-data",

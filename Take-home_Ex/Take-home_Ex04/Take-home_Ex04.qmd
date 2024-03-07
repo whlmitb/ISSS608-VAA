@@ -26,7 +26,7 @@ Our group obtained data on rental rates in Singapore from the [Urban Redevelopme
 ## 2.1 Install and Load packages
 
 ```{r}
-pacman::p_load(ggplot2, dplyr, tidyr, plotly, corrplot,readr,ggstatsplot,png)
+pacman::p_load(ggplot2, dplyr, tidyr, plotly,corrplot,readr,ggstatsplot,png)
 ```
 
 ## 2.2 Import Data
@@ -410,3 +410,5 @@ shinyApp(ui, server)
 # 5. Learning Point
 
 In the process of learning UI design, I found that it is a new knowledge field, and there are still many places for me to deeply understand and study hard. UI design is critical in designing visual analytics applications, so I thought that mastering this skill would positively impact my data science and analytics work.
+
+
