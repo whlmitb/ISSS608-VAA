@@ -845,5 +845,40 @@
     "title": "Hands-on Exercise 8: Modelling, Visualising and Analysing Network Data with R",
     "section": "",
     "text": "Show the code\nGAStech_edges_aggregated &lt;- GAStech_edges %&gt;%\n  left_join(GAStech_nodes, by = c(\"sourceLabel\" = \"label\")) %&gt;%\n  rename(from = id) %&gt;%\n  left_join(GAStech_nodes, by = c(\"targetLabel\" = \"label\")) %&gt;%\n  rename(to = id) %&gt;%\n  filter(MainSubject == \"Work related\") %&gt;%\n  group_by(from, to) %&gt;%\n    summarise(weight = n()) %&gt;%\n  filter(from!=to) %&gt;%\n  filter(weight &gt; 1) %&gt;%\n  ungroup()\n\n\n\n\n\n\n\nShow the code\nvisNetwork(GAStech_nodes, \n           GAStech_edges_aggregated)\n\n\n\n\n\n\n\n\n\n\n\nShow the code\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") \n\n\n\n\n\n\n\n\n\n\n\nShow the code\nGAStech_nodes &lt;- GAStech_nodes %&gt;%\n  rename(group = Department) \n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)\n\n\n\n\n\n\n\n\n\n\n\nShow the code\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visEdges(arrows = \"to\", \n           smooth = list(enabled = TRUE, \n                         type = \"curvedCW\")) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)\n\n\n\n\n\n\n\n\n\n\n\nShow the code\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visOptions(highlightNearest = TRUE,\n             nodesIdSelection = TRUE) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex07/In-class_Ex07.html",
+    "href": "In-class_Ex/In-class_Ex07/In-class_Ex07.html",
+    "title": "In-class Exercise 7",
+    "section": "",
+    "text": "Build Maps and Tree Maps using Tableau.\nMap1\n\nMap2\n\nTree Map1\n\nTree Map2"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex07/In-class_Ex07.html#install-package",
+    "href": "In-class_Ex/In-class_Ex07/In-class_Ex07.html#install-package",
+    "title": "In-class Exercise 7",
+    "section": "Install package",
+    "text": "Install package\n\npacman::p_load(sf, terra,gstat,viridis,tmap, tidyverse)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex07/In-class_Ex07.html#import-data",
+    "href": "In-class_Ex/In-class_Ex07/In-class_Ex07.html#import-data",
+    "title": "In-class Exercise 7",
+    "section": "Import data",
+    "text": "Import data\n\nrfstations &lt;- read_csv(\"data/aspatial/RainfallStation.csv\")\n\n\nrfdata &lt;- read_csv(\"data/aspatial/DAILYDATA_202402.csv\")%&gt;%\n  select(c(1,5))%&gt;% group_by(Station) %&gt;%\n  summarise(MONTHSUM = sum(`Daily Rainfall Total (mm)`))%&gt;%\n  ungroup()"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex07/In-class_Ex07.html#plotting-practice",
+    "href": "In-class_Ex/In-class_Ex07/In-class_Ex07.html#plotting-practice",
+    "title": "In-class Exercise 7",
+    "section": "Plotting Practice",
+    "text": "Plotting Practice\n\nrfdata &lt;- rfdata%&gt;%\n  left_join(rfstations)\n\n\nrfdata_sf &lt;- st_as_sf(rfdata,\n                coords = \n                  c(\"Longitude\",\n                    \"Latitude\"),\n                crs = 4326)%&gt;%\n  st_transform(crs = 3414)\n\n\nmpsz2019 &lt;- st_read(dsn = \"data/geospatial\",\n                    layer = \"MPSZ-2019\")%&gt;%\n  st_transform(crs = 3414)\n\nReading layer `MPSZ-2019' from data source \n  `D:\\whlmitb\\ISSS608-VAA\\In-class_Ex\\In-class_Ex07\\data\\geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 332 features and 6 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 103.6057 ymin: 1.158699 xmax: 104.0885 ymax: 1.470775\nGeodetic CRS:  WGS 84\n\n\n\ntmap_options(check.and.fix = TRUE)\ntmap_mode(\"view\")\ntm_shape(mpsz2019)+\n  tm_borders()+\n  tm_shape(rfdata_sf)+\n  tm_dots(col= 'MONTHSUM')\n\n\n\n\ntmap_mode(\"plot\")\n\n\ngrid &lt;- terra::rast(mpsz2019,\n                    nrows = 690,\n                    ncols = 1075)\n\nxy &lt;-terra::xyFromCell(grid,\n                       1:ncell(grid))\n\n\ncoop &lt;-st_as_sf(as.data.frame(xy),\n                coords = c(\"x\",\"y\"),\n                crs = st_crs(mpsz2019))\ncoop &lt;-st_filter(coop,mpsz2019)\n\n\nres &lt;- gstat(formula = MONTHSUM ~ 1,\n             locations = rfdata_sf,\n             nmax = 15,\n             set = list(idp = 0))\n\nresp&lt;- predict(res,coop)\n\n[inverse distance weighted interpolation]\n\nresp$x&lt;-st_coordinates(resp)[,1]\nresp$y&lt;-st_coordinates(resp)[,2]\nresp$pred &lt;-resp$var1.pred\n\npred&lt;- terra::rasterize(resp,grid,\n                        field=\"pred\",\n                        fun=\"mean\")\n\n\ntmap_options(check.and.fix = TRUE)\ntmap_mode(\"plot\")\ntm_shape(pred)+\n  tm_raster(alpha = 0.6,\n            palette = \"viridis\")\n\n\n\n\n\n\n\n\n\nv&lt;- variogram(log(MONTHSUM)~1,\n              data = rfdata_sf)\nplot(v)\n\n\n\n\n\n\n\n\n\nfv&lt;-fit.variogram(object = v,\n                  model = vgm(psill = 0.5,model = \"Sph\",\n                              range = 900,nugget = 0.1))\nfv\n\n  model psill range\n1   Nug   0.1     0\n2   Sph   0.5   900\n\nplot(v,fv,cex =1.5)\n\n\n\n\n\n\n\n\n\nk&lt;-gstat(formula = log(MONTHSUM)~1,\n              data = rfdata_sf,\n         model=fv)\n\n\nresp&lt;- predict(k,coop)\n\n[using ordinary kriging]\n\nresp$x&lt;-st_coordinates(resp)[,1]\nresp$y&lt;-st_coordinates(resp)[,2]\nresp$pred &lt;-resp$var1.pred\n\nkpred&lt;- terra::rasterize(resp,grid,\n                        field=\"pred\")\n\n\ntmap_options(check.and.fix = TRUE)\ntmap_mode(\"plot\")\ntm_shape(kpred)+\n  tm_raster(alpha = 0.6,\n            palette = \"viridis\")"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex07/data/geospatial/MPSZ-2019.html",
+    "href": "In-class_Ex/In-class_Ex07/data/geospatial/MPSZ-2019.html",
+    "title": "ISSS608-VAA",
+    "section": "",
+    "text": "&lt;!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’&gt;     dataset\n\n\n        0 0     false"
   }
 ]
