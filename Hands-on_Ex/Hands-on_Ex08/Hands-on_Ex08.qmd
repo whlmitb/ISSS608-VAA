@@ -1,7 +1,7 @@
 ---
-title: "Hands-on Exercise 8: Modelling, Visualising and Analysing Network Data with R"
+title: "Hands-on Exercise 8: Visualising and Analysing Geographic Data"
 author: "WAN HONGLU"
-date: "Feb 29, 2024"
+date: "Feb 24, 2024"
 date-modified: "last-modified"
 
 execute:
@@ -10,342 +10,689 @@ execute:
   warning: false
 editor: visual
 ---
-# Modelling, Visualising and Analysing Network Data with R
-## Install and Load packages
-```{r}
-pacman::p_load(igraph, tidygraph, ggraph, 
-               visNetwork, lubridate, clock,
-               tidyverse, graphlayouts,readr,dplyr,ggplot2)
-```
 
+# Choropleth Mapping with R
+
+## Install and Load packages
+
+```{r}
+pacman::p_load(sf, tmap, tidyverse)
+```
 
 ## Importing Data
+
 ```{r}
-GAStech_nodes <- read_csv("data/GAStech_email_node.csv")
-GAStech_edges <- read_csv("data/GAStech_email_edge-v2.csv")
-```
-### Reviewing the imported data
-```{r}
-glimpse(GAStech_edges)
-```
-### Wrangling time
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-GAStech_edges <- GAStech_edges %>%
-  mutate(SendDate = dmy(SentDate)) %>%
-  mutate(Weekday = wday(SentDate,
-                        label = TRUE,
-                        abbr = FALSE))
+mpsz <- st_read(dsn = "data/geospatial", 
+                layer = "MP14_SUBZONE_WEB_PL")
 ```
 
-### Wrangling attributes
 ```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-GAStech_edges_aggregated <- GAStech_edges %>%
-  filter(MainSubject == "Work related") %>%
-  group_by(source, target, Weekday) %>%
-    summarise(Weight = n()) %>%
-  filter(source!=target) %>%
-  filter(Weight > 1) %>%
-  ungroup()
+mpsz
 ```
- 
-## Creating network objects using tidygraph
-### Using tbl_graph() to build tidygraph data model
+
+## Importing Attribute Data
+
+```{r}
+popdata <- read_csv("data/aspatial/respopagesextod2011to2020.csv")
+```
+
+## Data Preparation
+
+### Data wrangling
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-GAStech_graph <- tbl_graph(nodes = GAStech_nodes,
-                           edges = GAStech_edges_aggregated, 
-                           directed = TRUE)
+popdata2020 <- popdata %>%
+  filter(Time == 2020) %>%
+  group_by(PA, SZ, AG) %>%
+  summarise(`POP` = sum(`Pop`)) %>%
+  ungroup() %>%
+  pivot_wider(names_from=AG, 
+              values_from=POP) %>%
+  mutate(YOUNG = rowSums(.[3:6])
+         +rowSums(.[12])) %>%
+mutate(`ECONOMY ACTIVE` = rowSums(.[7:11])+
+rowSums(.[13:15]))%>%
+mutate(`AGED`=rowSums(.[16:21])) %>%
+mutate(`TOTAL`=rowSums(.[3:21])) %>%  
+mutate(`DEPENDENCY` = (`YOUNG` + `AGED`)
+/`ECONOMY ACTIVE`) %>%
+  select(`PA`, `SZ`, `YOUNG`, 
+       `ECONOMY ACTIVE`, `AGED`, 
+       `TOTAL`, `DEPENDENCY`)
 ```
 
-### Reviewing the output tidygraph’s graph object
-```{r}
-GAStech_graph
-```
+### Joining the attribute data and geospatial data
 
-### Changing the active object
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-GAStech_graph %>%
-  activate(edges) %>%
-  arrange(desc(Weight))
-```
-
-## Plotting Practice - Plotting Static Network Graphs with ggraph package
-### Plotting a basic network graph
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-ggraph(GAStech_graph) +
-  geom_edge_link() +
-  geom_node_point()
-```
-
-### Changing the default network graph theme
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-g <- ggraph(GAStech_graph) + 
-  geom_edge_link(aes()) +
-  geom_node_point(aes())
+popdata2020 <- popdata2020 %>%
+  mutate_at(.vars = vars(PA, SZ), 
+          .funs = funs(toupper)) %>%
+  filter(`ECONOMY ACTIVE` > 0)
 
-g + theme_graph()
+mpsz_pop2020 <- left_join(mpsz, popdata2020,
+                          by = c("SUBZONE_N" = "SZ"))
+
+write_rds(mpsz_pop2020, "data/rds/mpszpop2020.rds")
 ```
 
-### Changing the coloring of the plot
+## Plotting Practice - Choropleth Mapping Geospatial Data Using tmap
+
+### Plotting a choropleth map quickly by using qtm()
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-g <- ggraph(GAStech_graph) + 
-  geom_edge_link(aes(colour = 'grey50')) +
-  geom_node_point(aes(colour = 'grey40'))
-
-g + theme_graph(background = 'grey10',
-                text_colour = 'white')
+tmap_mode("plot")
+qtm(mpsz_pop2020, 
+    fill = "DEPENDENCY")
 ```
 
+### Creating a choropleth map by using tmap’s elements
 
-### Fruchterman and Reingold layout
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-g <- ggraph(GAStech_graph, 
-            layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes())
-
-g + theme_graph()
+tm_shape(mpsz_pop2020)+
+  tm_fill("DEPENDENCY", 
+          style = "quantile", 
+          palette = "Blues",
+          title = "Dependency ratio") +
+  tm_layout(main.title = "Distribution of Dependency Ratio by planning subzone",
+            main.title.position = "center",
+            main.title.size = 1.2,
+            legend.height = 0.45, 
+            legend.width = 0.35,
+            frame = TRUE) +
+  tm_borders(alpha = 0.5) +
+  tm_compass(type="8star", size = 2) +
+  tm_scale_bar() +
+  tm_grid(alpha =0.2) +
+  tm_credits("Source: Planning Sub-zone boundary from Urban Redevelopment Authorithy (URA)\n and Population data from Department of Statistics DOS", 
+             position = c("left", "bottom"))
 ```
 
-### Modifying network nodes
+In the following sub-section to share tmap functions that used to plot these elements. Step 1: Drawing a base map.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-g <- ggraph(GAStech_graph, 
-            layout = "nicely") + 
-  geom_edge_link(aes()) +
-  geom_node_point(aes(colour = Department, 
-                      size = 3))
-
-g + theme_graph()
+tm_shape(mpsz_pop2020) +
+  tm_polygons()
 ```
-### Modifying edges
+
+Step 2: Drawing a choropleth map using tm_polygons().
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-g <- ggraph(GAStech_graph, 
-            layout = "nicely") +
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department), 
-                  size = 3)
-
-g + theme_graph()
+tm_shape(mpsz_pop2020)+
+  tm_polygons("DEPENDENCY")
 ```
-## Plotting Practice - Creating facet graphs
-### Working with facet_edges()
+
+Step 3: Drawing a choropleth map using tm_fill() and \*tm_border().
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-set_graph_style()
-
-g <- ggraph(GAStech_graph, 
-            layout = "nicely") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department), 
-                  size = 2)
-
-g + facet_edges(~Weekday)
+tm_shape(mpsz_pop2020)+
+  tm_fill("DEPENDENCY")
 ```
 
-### Working with facet_edges()
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-set_graph_style()
-
-g <- ggraph(GAStech_graph, 
-            layout = "nicely") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department), 
-                  size = 2) +
-  theme(legend.position = 'bottom')
-  
-g + facet_edges(~Weekday)
+tm_shape(mpsz_pop2020)+
+  tm_fill("DEPENDENCY") +
+  tm_borders(lwd = 0.1,  alpha = 1)
 ```
 
-### A framed facet graph
+### Data classification methods of tmap
+
+Plotting choropleth maps with built-in classification methods.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-set_graph_style() 
-
-g <- ggraph(GAStech_graph, 
-            layout = "nicely") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department), 
-                  size = 2)
-  
-g + facet_edges(~Weekday) +
-  th_foreground(foreground = "grey80",  
-                border = TRUE) +
-  theme(legend.position = 'bottom')
+tm_shape(mpsz_pop2020)+
+  tm_fill("DEPENDENCY",
+          n = 5,
+          style = "jenks") +
+  tm_borders(alpha = 0.5)
 ```
-### Working with facet_nodes()
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-set_graph_style()
-
-g <- ggraph(GAStech_graph, 
-            layout = "nicely") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department), 
-                  size = 2)
-  
-g + facet_nodes(~Department)+
-  th_foreground(foreground = "grey80",  
-                border = TRUE) +
-  theme(legend.position = 'bottom')
+tm_shape(mpsz_pop2020)+
+  tm_fill("DEPENDENCY",
+          n = 5,
+          style = "equal") +
+  tm_borders(alpha = 0.5)
 ```
-## Plotting Practice - Network Metrics Analysis
-### Computing centrality indices
+
+### Plotting choropleth map with custome break
+
+```{r}
+summary(mpsz_pop2020$DEPENDENCY)
+```
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-g <- GAStech_graph %>%
-  mutate(betweenness_centrality = centrality_betweenness()) %>%
-  ggraph(layout = "fr") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department,
-            size=betweenness_centrality))
-g + theme_graph()
+tm_shape(mpsz_pop2020)+
+  tm_fill("DEPENDENCY",
+          breaks = c(0, 0.60, 0.70, 0.80, 0.90, 1.00)) +
+  tm_borders(alpha = 0.5)
 ```
 
-### Visualising network metrics
+### Colour Scheme
+
+Using ColourBrewer palette.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-g <- GAStech_graph %>%
-  ggraph(layout = "fr") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department, 
-                      size = centrality_betweenness()))
-g + theme_graph()
+tm_shape(mpsz_pop2020)+
+  tm_fill("DEPENDENCY",
+          n = 6,
+          style = "quantile",
+          palette = "Blues") +
+  tm_borders(alpha = 0.5)
 ```
 
-### Visualising Community
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-g <- GAStech_graph %>%
-  mutate(community = as.factor(group_edge_betweenness(weights = Weight, directed = TRUE))) %>%
-  ggraph(layout = "fr") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = community))  
-
-g + theme_graph()
+tm_shape(mpsz_pop2020)+
+  tm_fill("DEPENDENCY",
+          style = "quantile",
+          palette = "-Greens") +
+  tm_borders(alpha = 0.5)
 ```
 
-## Plotting Practice - Building Interactive Network Graph with visNetwork
-### Data preparation
+### Map Layouts
+
+Map Legend.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-GAStech_edges_aggregated <- GAStech_edges %>%
-  left_join(GAStech_nodes, by = c("sourceLabel" = "label")) %>%
-  rename(from = id) %>%
-  left_join(GAStech_nodes, by = c("targetLabel" = "label")) %>%
-  rename(to = id) %>%
-  filter(MainSubject == "Work related") %>%
-  group_by(from, to) %>%
-    summarise(weight = n()) %>%
-  filter(from!=to) %>%
-  filter(weight > 1) %>%
-  ungroup()
+tm_shape(mpsz_pop2020)+
+  tm_fill("DEPENDENCY", 
+          style = "jenks", 
+          palette = "Blues", 
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_layout(main.title = "Distribution of Dependency Ratio by planning subzone \n(Jenks classification)",
+            main.title.position = "center",
+            main.title.size = 1,
+            legend.height = 0.45, 
+            legend.width = 0.35,
+            legend.outside = FALSE,
+            legend.position = c("right", "bottom"),
+            frame = FALSE) +
+  tm_borders(alpha = 0.5)
 ```
 
-### Plotting the first interactive network graph
+Map style.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-visNetwork(GAStech_nodes, 
-           GAStech_edges_aggregated)
+tm_shape(mpsz_pop2020)+
+  tm_fill("DEPENDENCY", 
+          style = "quantile", 
+          palette = "-Greens") +
+  tm_borders(alpha = 0.5) +
+  tmap_style("classic")
 ```
 
-### Working with layout
+Cartographic Furniture.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-visNetwork(GAStech_nodes,
-           GAStech_edges_aggregated) %>%
-  visIgraphLayout(layout = "layout_with_fr") 
+tm_shape(mpsz_pop2020)+
+  tm_fill("DEPENDENCY", 
+          style = "quantile", 
+          palette = "Blues",
+          title = "No. of persons") +
+  tm_layout(main.title = "Distribution of Dependency Ratio \nby planning subzone",
+            main.title.position = "center",
+            main.title.size = 1.2,
+            legend.height = 0.45, 
+            legend.width = 0.35,
+            frame = TRUE) +
+  tm_borders(alpha = 0.5) +
+  tm_compass(type="8star", size = 2) +
+  tm_scale_bar(width = 0.15) +
+  tm_grid(lwd = 0.1, alpha = 0.2) +
+  tm_credits("Source: Planning Sub-zone boundary from Urban Redevelopment Authorithy (URA)\n and Population data from Department of Statistics DOS", 
+             position = c("left", "bottom"))
+
 ```
 
-### Working with visual attributes - Nodes
+```{r}
+tmap_style("white")
+```
+
+### Drawing Small Multiple Choropleth Maps
+
+By assigning multiple values to at least one of the aesthetic arguments.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-GAStech_nodes <- GAStech_nodes %>%
-  rename(group = Department) 
-
-visNetwork(GAStech_nodes,
-           GAStech_edges_aggregated) %>%
-  visIgraphLayout(layout = "layout_with_fr") %>%
-  visLegend() %>%
-  visLayout(randomSeed = 123)
+tm_shape(mpsz_pop2020)+
+  tm_fill(c("YOUNG", "AGED"),
+          style = "equal", 
+          palette = "Blues") +
+  tm_layout(legend.position = c("right", "bottom")) +
+  tm_borders(alpha = 0.5) +
+  tmap_style("white")
 ```
 
-### Working with visual attributes - Edges
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-visNetwork(GAStech_nodes,
-           GAStech_edges_aggregated) %>%
-  visIgraphLayout(layout = "layout_with_fr") %>%
-  visEdges(arrows = "to", 
-           smooth = list(enabled = TRUE, 
-                         type = "curvedCW")) %>%
-  visLegend() %>%
-  visLayout(randomSeed = 123)
+tm_shape(mpsz_pop2020)+ 
+  tm_polygons(c("DEPENDENCY","AGED"),
+          style = c("equal", "quantile"), 
+          palette = list("Blues","Greens")) +
+  tm_layout(legend.position = c("right", "bottom"))
 ```
 
-### Interactivity
+By defining a group-by variable in tm_facets().
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-visNetwork(GAStech_nodes,
-           GAStech_edges_aggregated) %>%
-  visIgraphLayout(layout = "layout_with_fr") %>%
-  visOptions(highlightNearest = TRUE,
-             nodesIdSelection = TRUE) %>%
-  visLegend() %>%
-  visLayout(randomSeed = 123)
+tm_shape(mpsz_pop2020) +
+  tm_fill("DEPENDENCY",
+          style = "quantile",
+          palette = "Blues",
+          thres.poly = 0) + 
+  tm_facets(by="REGION_N", 
+            free.coords=TRUE, 
+            drop.shapes=FALSE) +
+  tm_layout(legend.show = FALSE,
+            title.position = c("center", "center"), 
+            title.size = 20) +
+  tm_borders(alpha = 0.5)
 ```
 
+By creating multiple stand-alone maps with tmap_arrange().
 
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+youngmap <- tm_shape(mpsz_pop2020)+ 
+  tm_polygons("YOUNG", 
+              style = "quantile", 
+              palette = "Blues")
 
-  
+agedmap <- tm_shape(mpsz_pop2020)+ 
+  tm_polygons("AGED", 
+              style = "quantile", 
+              palette = "Blues")
 
+tmap_arrange(youngmap, agedmap, asp=1, ncol=2)
+```
 
+### Mappping Spatial Object Meeting a Selection Criterion
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+tm_shape(mpsz_pop2020[mpsz_pop2020$REGION_N=="CENTRAL REGION", ])+
+  tm_fill("DEPENDENCY", 
+          style = "quantile", 
+          palette = "Blues", 
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_layout(legend.outside = TRUE,
+            legend.height = 0.45, 
+            legend.width = 5.0,
+            legend.position = c("right", "bottom"),
+            frame = FALSE) +
+  tm_borders(alpha = 0.5)
+```
+
+# Visualising Geospatial Point Data
+
+## Install and Load packages
+
+```{r}
+pacman::p_load(sf, tmap, tidyverse)
+```
+
+## Data Import and Preparation
+
+```{r}
+sgpools <- read_csv("data/aspatial/SGPools_svy21.csv")
+```
+
+```{r}
+list(sgpools) 
+```
+
+## Plotting Practice - Creating a sf data frame from an aspatial data frame
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+sgpools_sf <- st_as_sf(sgpools, 
+                       coords = c("XCOORD", "YCOORD"),
+                       crs= 3414)
+list(sgpools_sf)
+```
+
+## Plotting Practice - Drawing Proportional Symbol Map
+
+```{r}
+tmap_mode("view")
+```
+
+### It all started with an interactive point symbol map
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+tm_shape(sgpools_sf)+
+tm_bubbles(col = "red",
+           size = 1,
+           border.col = "black",
+           border.lwd = 1)
+```
+
+### Making it proportional
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+tm_shape(sgpools_sf)+
+tm_bubbles(col = "red",
+           size = "Gp1Gp2 Winnings",
+           border.col = "black",
+           border.lwd = 1)
+```
+
+### Giving it a different colour
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+tm_shape(sgpools_sf)+
+tm_bubbles(col = "OUTLET TYPE", 
+          size = "Gp1Gp2 Winnings",
+          border.col = "black",
+          border.lwd = 1)
+```
+
+### Having a twin brothers
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+tm_shape(sgpools_sf) +
+  tm_bubbles(col = "OUTLET TYPE", 
+          size = "Gp1Gp2 Winnings",
+          border.col = "black",
+          border.lwd = 1) +
+  tm_facets(by= "OUTLET TYPE",
+            nrow = 1,
+            sync = TRUE)
+```
+
+```{r}
+tmap_mode("plot")
+```
+
+# Analytical Mapping
+
+## Installing and loading packages
+
+```{r}
+pacman::p_load(tmap, tidyverse, sf)
+```
+
+## Importing data
+
+```{r}
+NGA_wp <- read_rds("data/rds/NGA_wp.rds")
+```
+
+## Plotting Practice - Basic Choropleth Mapping
+
+### Visualising distribution of non-functional water point
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+p1 <- tm_shape(NGA_wp) +
+  tm_fill("wp_functional",
+          n = 10,
+          style = "equal",
+          palette = "Blues") +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Distribution of functional water point by LGAs",
+            legend.outside = FALSE)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+p2 <- tm_shape(NGA_wp) +
+  tm_fill("total_wp",
+          n = 10,
+          style = "equal",
+          palette = "Blues") +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Distribution of total  water point by LGAs",
+            legend.outside = FALSE)
+```
+
+```{r}
+tmap_arrange(p2, p1, nrow = 1)
+```
+
+## Plotting Practice - Choropleth Map for Rates
+
+### Deriving Proportion of Functional Water Points and Non-Functional Water Points
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+NGA_wp <- NGA_wp %>%
+  mutate(pct_functional = wp_functional/total_wp) %>%
+  mutate(pct_nonfunctional = wp_nonfunctional/total_wp)
+```
+
+### Plotting map of rate
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+tm_shape(NGA_wp) +
+  tm_fill("pct_functional",
+          n = 10,
+          style = "equal",
+          palette = "Blues",
+          legend.hist = TRUE) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Rate map of functional water point by LGAs",
+            legend.outside = TRUE)
+```
+
+## Plotting Practice - Extreme Value Maps
+
+### Percentile Map
+
+**Data Preparation.**
+
+Step 1: Exclude records with NA by using the code chunk below.
+
+```{r}
+NGA_wp <- NGA_wp %>%
+  drop_na()
+```
+
+Step 2: Creating customised classification and extracting values.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+percent <- c(0,.01,.1,.5,.9,.99,1)
+var <- NGA_wp["pct_functional"] %>%
+  st_set_geometry(NULL)
+quantile(var[,1], percent)
+```
+
+Creating the get.var function.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+get.var <- function(vname,df) {
+  v <- df[vname] %>% 
+    st_set_geometry(NULL)
+  v <- unname(v[,1])
+  return(v)
+}
+```
+
+A percentile mapping function.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+percentmap <- function(vnam, df, legtitle=NA, mtitle="Percentile Map"){
+  percent <- c(0,.01,.1,.5,.9,.99,1)
+  var <- get.var(vnam, df)
+  bperc <- quantile(var, percent)
+  tm_shape(df) +
+  tm_polygons() +
+  tm_shape(df) +
+     tm_fill(vnam,
+             title=legtitle,
+             breaks=bperc,
+             palette="Blues",
+          labels=c("< 1%", "1% - 10%", "10% - 50%", "50% - 90%", "90% - 99%", "> 99%"))  +
+  tm_borders() +
+  tm_layout(main.title = mtitle, 
+            title.position = c("right","bottom"))
+}
+```
+
+Test drive the percentile mapping function.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+percentmap("total_wp", NGA_wp)
+```
+
+### Box map
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+ggplot(data = NGA_wp,
+       aes(x = "",
+           y = wp_nonfunctional)) +
+  geom_boxplot()
+```
+
+Creating the boxbreaks function.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+boxbreaks <- function(v,mult=1.5) {
+  qv <- unname(quantile(v))
+  iqr <- qv[4] - qv[2]
+  upfence <- qv[4] + mult * iqr
+  lofence <- qv[2] - mult * iqr
+  # initialize break points vector
+  bb <- vector(mode="numeric",length=7)
+  # logic for lower and upper fences
+  if (lofence < qv[1]) {  # no lower outliers
+    bb[1] <- lofence
+    bb[2] <- floor(qv[1])
+  } else {
+    bb[2] <- lofence
+    bb[1] <- qv[1]
+  }
+  if (upfence > qv[5]) { # no upper outliers
+    bb[7] <- upfence
+    bb[6] <- ceiling(qv[5])
+  } else {
+    bb[6] <- upfence
+    bb[7] <- qv[5]
+  }
+  bb[3:5] <- qv[2:4]
+  return(bb)
+}
+```
+
+Creating the get.var function.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+get.var <- function(vname,df) {
+  v <- df[vname] %>% st_set_geometry(NULL)
+  v <- unname(v[,1])
+  return(v)
+}
+```
+
+Test drive the newly created function.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+var <- get.var("wp_nonfunctional", NGA_wp) 
+boxbreaks(var)
+```
+
+Boxmap function.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+boxmap <- function(vnam, df, 
+                   legtitle=NA,
+                   mtitle="Box Map",
+                   mult=1.5){
+  var <- get.var(vnam,df)
+  bb <- boxbreaks(var)
+  tm_shape(df) +
+    tm_polygons() +
+  tm_shape(df) +
+     tm_fill(vnam,title=legtitle,
+             breaks=bb,
+             palette="Blues",
+          labels = c("lower outlier", 
+                     "< 25%", 
+                     "25% - 50%", 
+                     "50% - 75%",
+                     "> 75%", 
+                     "upper outlier"))  +
+  tm_borders() +
+  tm_layout(main.title = mtitle, 
+            title.position = c("left",
+                               "top"))
+}
+tmap_mode("plot")
+boxmap("wp_nonfunctional", NGA_wp)
+```
