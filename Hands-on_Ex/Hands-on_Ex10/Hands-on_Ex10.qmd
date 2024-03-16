@@ -101,7 +101,7 @@ quarts <- sales_report %>%
                               0.75)) %>%
   right_join(sales_report)
 ```
-###sparklines in ggplot2
+### sparklines in ggplot2
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
