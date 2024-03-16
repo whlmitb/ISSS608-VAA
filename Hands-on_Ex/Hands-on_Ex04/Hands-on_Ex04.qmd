@@ -582,19 +582,6 @@ devtools::install_github("wilkelab/ungeviz")
 library(ungeviz)
 ```
 
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-ggplot(data = exam, 
-       (aes(x = factor(RACE), y = MATHS))) +
-  geom_point(position = position_jitter(
-    height = 0.3, width = 0.05), 
-    size = 0.4, color = "#0072B2", alpha = 1/2) +
-  geom_hpline(data = sampler(25, group = RACE), height = 0.6, color = "#D55E00") +
-  theme_bw() + 
-  transition_states(.draw, 1, 3)
-```
-
 # Funnel Plots for Fair Comparisons
 
 ## Loading R packages
