@@ -1,0 +1,20 @@
+---
+title: "In-class Exercise 10"
+author: "WAN HONGLU"
+date: "March 23, 2024"
+date-modified: "last-modified"
+
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+  message: false
+editor: visual
+---
+
+# Tableau Practice
+
+[The Tableau link](https://public.tableau.com/app/profile/honglu.wan/viz/In-class_Ex10_CoffeeDashboard/Dashboard1)
+
+![](images/clipboard-1034363508.png)
